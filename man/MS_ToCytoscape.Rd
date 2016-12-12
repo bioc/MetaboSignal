@@ -12,7 +12,7 @@ node ("untarget") of the network.
 }
 \usage{
 MS_ToCytoscape (network_table, organism_code, names = TRUE, target_nodes = NULL,
-                file_name = "Cytoscape")
+                interaction_type, file_name = "Cytoscape")
 }
 \arguments{
   \item{network_table}{two-column matrix where each row represents and edge
@@ -28,6 +28,9 @@ MS_ToCytoscape (network_table, organism_code, names = TRUE, target_nodes = NULL,
   }
   \item{target_nodes}{character vector containing the IDs of the target nodes to
   be discriminated from the other nodes of the network.This argument is optional.
+  }
+  \item{interaction_type}{optional three-column matrix generated using the function
+  "MS_interactionType( )".
   }
   \item{file_name}{character vector that allows customizing the name of the
   exported files. By default, the file_name = "Cytoscape".

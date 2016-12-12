@@ -41,7 +41,13 @@ MS_ChangeNames = function(nodes, organism_code) {
 #################### MS_GetShortestpaths ######################
 
 MS_GetShortestpaths = function(network_table, source_node, target_node,
-                               mode = "SP", type = "first") {
+                               mode = "out", type = "first", network = FALSE,
+                               interaction_type = NULL) {
+
+    ## Check that source_node and target_node are different
+    if (source_node == target_node) {
+        stop ("source_node and target_not must be different")
+    }
 
     ## Force network_table to be a unique 2-column matrix
     network_table = check_matrix(network_table)
@@ -104,13 +110,44 @@ MS_GetShortestpaths = function(network_table, source_node, target_node,
                 path = as.character(all_paths)
             } else {
                 if (type == "first") {
-                  path = as.character(all_paths[1, ])
+                    path = as.character(all_paths[1, ])
                 } else { # type='bw'
-                  path = as.character(BW_ranked_SP(all_paths, BW_matrix, networkBW_i, mode))
+                    path = as.character(BW_ranked_SP(all_paths, BW_matrix, networkBW_i, mode))
                 }
             }
             output_path = path
         }
+
+        ## Path as network
+        if(length(output_path) == 0) {
+            return(NULL)
+        }
+
+        if (network == TRUE) {
+
+            if (is.vector(output_path)) {
+                path_network = path_as_network(output_path)
+            } else {
+                all_pathsList = split(all_paths, row(output_path))
+                path_network = unique(do.call(rbind, lapply(all_pathsList,
+                                                            path_as_network)))
+            }
+
+            colnames(path_network) = c("node1", "node2")
+            rownames(path_network) = NULL
+
+            if(!is.null(interaction_type)) {
+                path_networkBU = path_network
+                net_L = split(path_network, row(path_networkBU))
+                path_network = unique(do.call(rbind, lapply(net_L, match_interaction,
+                                                            interaction_type)))
+                colnames(path_network) = c("node1","node2",
+                                           "interaction_subtype")
+            }
+
+            output_path = unique(path_network)
+        }
+
         return(output_path)
     }
 }
@@ -250,18 +287,30 @@ MS_NodeBW = function(network_table, mode = "all", normalized = TRUE) {
 #################### MS_ToCytoscape ####################
 
 MS_ToCytoscape = function(network_table, organism_code, names = TRUE,
-                          target_nodes = NULL, file_name = "Cytoscape") {
+                          target_nodes = NULL, interaction_type = NULL,
+                          file_name = "Cytoscape") {
 
     ## Force network_table to be a unique 2-column matrix
     network_table = check_matrix(network_table)
 
+    ## Check interaction_type
+    if (!is.null(interaction_type)) {
+        if (!is.matrix(interaction_type)) {
+            stop ("invalid interaction_type. Check MS_interactionType()" )
+        }
+        if (ncol(interaction_type) != 3) {
+            stop ("invalid interaction_type. Check MS_interactionType()")
+        }
+    }
+
     ## Build cytoscape network with interaction based on edge directionality
     network_tableCytoscape = cbind(network_table[, 1], rep("interaction",
-        nrow(network_table)), network_table[, 2])
+                                                           nrow(network_table)),
+                                   network_table[, 2])
     #The column interaction will be replace by reversible or irreversible.
     rows = split(network_tableCytoscape, row(network_tableCytoscape))
 
-    index_to_include = rep(1, times = length(rows))
+    index_to_remove = c()
     for (i in 1:nrow(network_tableCytoscape)) {
         a = c(network_tableCytoscape[i, 1], network_tableCytoscape[i, 2],
               network_tableCytoscape[i, 3])
@@ -270,13 +319,13 @@ MS_ToCytoscape = function(network_table, organism_code, names = TRUE,
         if (Match(rows, a_2) == TRUE) {
             network_tableCytoscape[i, 2] = "reversible"
             index = as.numeric(which(network_tableCytoscape[, 1] == a_2[1]
-                & network_tableCytoscape[, 2] == a_2[2]
-                & network_tableCytoscape[, 3] == a_2[3], arr.ind = FALSE))
-            index_to_include[index] = 0
+                                     & network_tableCytoscape[, 2] == a_2[2]
+                                     & network_tableCytoscape[, 3] == a_2[3],
+                                     arr.ind = FALSE))
+            index_to_remove = c(index_to_remove, index)
         } else (network_tableCytoscape[i, 2] = "irreversible")
     }
     network_table_interactions = network_tableCytoscape
-    index_to_remove = which (index_to_include == 0)
 
     if (length(index_to_remove) >= 1) {
         network_table_interactions = network_table_interactions[-index_to_remove, ]
@@ -288,12 +337,24 @@ MS_ToCytoscape = function(network_table, organism_code, names = TRUE,
                                              "target_node")
     rownames(network_table_interactions) = NULL
 
+    ## Add interaction type if needed
+
+    if (!is.null(interaction_type)) {
+        network_table_interactionsBU = network_table_interactions
+        net_L = split(network_table_interactionsBU, row(network_table_interactionsBU))
+        network_table_interactions = unique(do.call(rbind, lapply(net_L, match_interaction,
+                                                                  interaction_type)))
+        colnames(network_table_interactions) = c("source_node", "interaction",
+                                                 "target_node", "interaction_subtype")
+
+    }
+
     if (names == TRUE) {
         all_nodes_network = unique(as.vector(network_table_interactions))
         all_nodes_names = MS_ChangeNames(all_nodes_network, organism_code)
         for (i in seq_along(all_nodes_names)) {
             network_table_interactions[network_table_interactions ==
-                all_nodes_network[i]] = all_nodes_names[i]
+                                           all_nodes_network[i]] = all_nodes_names[i]
         }
     }
     cytoscape = as.data.frame(network_table_interactions, rownames = NULL)
@@ -339,4 +400,3 @@ MS_ToCytoscape = function(network_table, organism_code, names = TRUE,
     }
     return(cytoscape)
 }
-

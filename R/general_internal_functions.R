@@ -553,3 +553,37 @@ MS_FindMappedMetabolites = function(metabolites, network_table) {
     }
     return(List_metabo)
 }
+
+################## match_interaction ###################
+match_interaction = function(edge, all_interactions) {
+    
+    if (length(edge) == 3) {
+        ind = which(all_interactions[, 1] == edge[1] & 
+                        all_interactions[, 2] == edge[3])
+        if(length(ind) > 0) {
+            subtypes = sort(unique(all_interactions[ind, 3]))
+            subtype = paste(subtypes, collapse = ";")
+            subtype = gsub(" ", "_", subtype)
+        } else if (grepl("cpd:", edge[1]) | grepl("cpd:", edge[3])) {
+            subtype = "compound"
+        } else {
+            subtype = "undetermined"
+        }
+        new_line = c(edge[1], edge[2], edge[3], subtype) 
+    } else {
+        ind = which(all_interactions[, 1] == edge[1] & 
+                        all_interactions[, 2] == edge[2])
+        if(length(ind) > 0) {
+            subtypes = sort(unique(all_interactions[ind, 3]))
+            subtype = paste(subtypes, collapse = ";")
+            subtype = gsub(" ", "_", subtype)
+        } else if (grepl("cpd:", edge[1]) | grepl("cpd:", edge[2])) {
+            subtype = "compound"
+        } else {
+            subtype = "undetermined"
+        }
+        new_line = c(edge[1], edge[2], subtype) 
+    }
+    
+    return(new_line)
+}

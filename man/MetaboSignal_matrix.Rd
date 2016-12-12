@@ -53,6 +53,7 @@ A two-column matrix where each row represents an edge between two nodes.
 \note{
 Reaction directionality reported in KEGG has been cross-validated with published
 literature (Duarte et al., 2007).
+For examples of metabolic and signaling KEGG pathway check the dataset rno_pathways.
 }
 \references{
 Carlson, M. org.Hs.eg.db: Genome wide annotation for Human.R package version 3.2.3.

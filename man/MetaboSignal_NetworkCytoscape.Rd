@@ -19,10 +19,12 @@ final version of the network-table can be used to generate new cytoscape files
 using the function "MS_ToCytoscape( )".
 }
 \usage{
-MetaboSignal_NetworkCytoscape(network_table, organism_code, organism_name, source_genes,
-                              target_metabolites, mode = "SP", type = "first",
-                              distance_th = Inf, collapse_genes = FALSE, names = TRUE,
-                              export_cytoscape = TRUE, file_name = "Cytoscape")
+MetaboSignal_NetworkCytoscape(network_table, organism_code, organism_name,
+                              source_genes,target_metabolites, mode = "SP",
+                              type = "first", interaction_type = NULL,
+                              distance_th = Inf, collapse_genes = FALSE,
+                              names = TRUE, export_cytoscape = TRUE,
+                              file_name = "Cytoscape")
 }
 \arguments{
   \item{network_table}{two-column matrix where each row represents an edge
@@ -67,6 +69,9 @@ MetaboSignal_NetworkCytoscape(network_table, organism_code, organism_name, sourc
   nodes of the path. Note that using type = "bw" increases the time required to
   compute this function. By default, type = "first".
   }
+  \item{interaction_type}{optional three-column matrix generated using the function
+  "MS_interactionType( )".
+  }
   \item{distance_th}{establishes a shortest path length threshold. Only shortest
   paths with length below this threshold will be included in the network. By
   default, distance_th = Inf.
@@ -91,7 +96,7 @@ MetaboSignal_NetworkCytoscape(network_table, organism_code, organism_name, sourc
   }
 }
 \value{
-A two-column matrix where each row represents an edge between two nodes. By
+A matrix where each row represents an edge between two nodes. By
 default, the function also generates a network file ("CytoscapeNetwork.txt") and
 two attribute files ("CytoscapeAttributesType.txt", "CytoscapeAttributesTarget.txt"),
 which can be imported into cytoscape to visualize the network.

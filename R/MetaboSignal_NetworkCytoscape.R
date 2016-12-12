@@ -110,8 +110,9 @@ metabolite_SP = function(metabolite, source_genes, network_table, distance_table
 
 MetaboSignal_NetworkCytoscape = function(network_table, organism_code,
     organism_name, source_genes, target_metabolites, mode = "SP",
-    type = "first", distance_th = Inf, collapse_genes = FALSE,
-    names = TRUE, export_cytoscape = TRUE, file_name = "Cytoscape") {
+    type = "first", interaction_type = NULL, distance_th = Inf,
+    collapse_genes = FALSE, names = TRUE, export_cytoscape = TRUE,
+    file_name = "Cytoscape") {
 
     ## Check mode and type
     check_mode_type(mode = mode, type = type)
@@ -235,6 +236,7 @@ MetaboSignal_NetworkCytoscape = function(network_table, organism_code,
 
             cytoscape = MS_ToCytoscape(all_pathsGM, organism_code,
                 names = namescyto, target_nodes = all_target_nodes,
+                interaction_type = interaction_type,
                 file_name = file_name)
         }
 

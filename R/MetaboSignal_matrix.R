@@ -1,8 +1,9 @@
 #################### get_metabonet ###################
-get_metabonet = function(path, all_paths) {
+get_metabonet = function(path, all_paths, organism_code) {
     message(path)
     if (path %in% all_paths) {
-        if (substr(path, 4, nchar(path)) == "01100") { # remove metabolic pathways map
+        if (substr(path, (nchar(organism_code) + 1), nchar(path)) == "01100") {
+          # remove metabolic pathways map
             parsed_path = NULL
         } else {
             # Check that the input path exists
@@ -74,7 +75,16 @@ MetaboSignal_matrix = function(metabo_paths = NULL, signaling_paths = NULL,
 
     ## Check that all the paths belong to the same organism
     input_paths = c(metabo_paths, signaling_paths)
-    organism_code = substr(input_paths, 1, 3)
+
+    ## Account for organism code with 4 digits
+    org_ans = suppressWarnings(is.na(as.numeric(unlist(strsplit(input_paths[1], ""))[4])))
+
+    if(org_ans == TRUE) {
+        organism_code = substr(input_paths, 1, 4)
+    } else {
+        organism_code = substr(input_paths, 1, 3)
+    }
+
     organism_code = unique(organism_code)
     if (length(organism_code) > 1) {
         stop("All paths have to belong to the same organism: check path IDs")
@@ -86,7 +96,7 @@ MetaboSignal_matrix = function(metabo_paths = NULL, signaling_paths = NULL,
     if (grepl("Error", lines)[1]) { # example: metabo_paths = 'X'
         stop("Incorrect path IDs")
     }
-    all_paths = substr(names(lines), 6, 13)
+    all_paths = substr(names(lines), 6, nchar(lines))
 
     ## Initiate paths_included
     paths_included = rep(1, times = length(input_paths))
@@ -106,7 +116,7 @@ MetaboSignal_matrix = function(metabo_paths = NULL, signaling_paths = NULL,
         message(to_print)
 
         ### Get KGML files and transform them into reaction files####
-        list_parsed_paths = lapply(metabo_paths, get_metabonet, all_paths)
+        list_parsed_paths = lapply(metabo_paths, get_metabonet, all_paths, organism_code)
         names(list_parsed_paths) = metabo_paths
         path_names = metabo_paths
 
