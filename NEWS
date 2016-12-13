@@ -1,4 +1,4 @@
-CHANGES IN VERSION 1.1.6
+CHANGES IN VERSION 1.5.2
 -----------------------
   o MetaboSignal includes a new function: "MS_interactionType()". This function
   allows getting the interaction subtype between signaling nodes. The output
