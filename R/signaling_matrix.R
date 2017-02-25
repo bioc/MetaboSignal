@@ -41,25 +41,25 @@ filter_genes_tissue = function(ensembl, tissue, m_value, f_value) {
     }
     tissues = as.matrix(getHpa(ensembl, hpadata = "hpaNormalTissue"))
 
-    if ("Supportive" %in% as.character(tissues[, 6]) == FALSE) {
+    if ("Supportive" %in% as.character(tissues[, 7]) == FALSE) {
         tissues_detected = tissue  # Filtering ignored
     } else {
-        indexSup = grep("Supportive", as.character(tissues[,6]))
+        indexSup = grep("Supportive", as.character(tissues[,7]))
         tissues = tissues[indexSup, ]
-        undetected = c(grep("Not detected", tissues[, 4]))
+        undetected = c(grep("Not detected", tissues[, 5]))
 
         if (length(undetected) >= 1) {
             # if the gene is undetected in some tissues
             if (nrow(tissues) - length(undetected) > 1) {
-                tissues_detected = tissues[-c(undetected), 2]
+                tissues_detected = tissues[-c(undetected), 3]
             } else if (nrow(tissues) - length(undetected) == 1) {
-                tissues_detected = tissues[-c(undetected), ][2]
+                tissues_detected = tissues[-c(undetected), ][3]
             } else if (nrow(tissues) - length(undetected) == 0) {
                 tissues_detected = "undetected"
             }
         } else {
             # If the gene is detected in all tissues
-            tissues_detected = tissues[, 2]
+            tissues_detected = tissues[, 3]
         }
     }
     tissues_detected = unique(as.character(tissues_detected))

@@ -41,7 +41,7 @@ MS_GetShortestpaths(network_table, source_node, target_node, mode = "out",
   = TRUE, the shortest path(s) will be represented as a two-column matrix where
   each row represents and egde between two nodes. If network = FALSE, the shortest
   path(s) will be represented as a vector (single path), or as a matrix (multiple paths),
-  where each row represents a shortest path. By default, network = "FALSE".
+  where each row represents a shortest path. By default, network = FALSE.
   }
   \item{interaction_type}{optional three-column matrix generated using the function
   "MS_interactionType( )". This argument is ignored when network = FALSE.

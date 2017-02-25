@@ -40,7 +40,7 @@ MetaboSignal_matrix(metabo_paths, signaling_paths, organism_name, tissue = "all"
   \item{tissue}{character vector containing the name(s) of the target tissue(s).
   By default, tissue = "all" indicating that signaling gene nodes will not be
   filtered by tissue expression. Otherwise, possible tissues are those included in
-  the dataset hpaNormalTissue (see levels(hpaNormalTissue[,2])).
+  the dataset hpaNormalTissue (see levels(hpaNormalTissue[,"Tissue"])).
   }
   \item{expand_genes}{logical scalar indicating whether the gene nodes will
   represent orthology IDs (FALSE) or organim-specific gene IDs (TRUE). By default,
