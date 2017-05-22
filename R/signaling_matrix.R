@@ -30,46 +30,64 @@ unique_symbol_ensembl = function (symbol, gene_enSall){
 }
 
 
-#################### filter_genes_tissue ####################
-filter_genes_tissue = function(ensembl, tissue, m_value, f_value) {
+#################### filter_genes_tissue_updated ####################
+filter_genes_tissue_updated = function(gene_enSall, tissue) {
 
-    if (ensembl == m_value) {
-        message(" -Progress:50% completed")
-    }
-    if (ensembl == f_value) {
-        message(" -Progress:100% completed")
-    }
-    tissues = as.matrix(getHpa(ensembl, hpadata = "hpaNormalTissue"))
+     ensembl = unique(as.character(gene_enSall[, 3]))
+     hpar_data = hpaNormalTissue
 
-    if ("Supportive" %in% as.character(tissues[, 7]) == FALSE) {
-        tissues_detected = tissue  # Filtering ignored
-    } else {
-        indexSup = grep("Supportive", as.character(tissues[,7]))
-        tissues = tissues[indexSup, ]
-        undetected = c(grep("Not detected", tissues[, 5]))
+     tissue = paste(tissue, collapse = "|")
+     level = "Not detected"
+     tissue_index = grep(tissue, hpar_data[, "Tissue"])
+     level_index = grep(level, hpar_data[, "Level"])
+     reliability_index =  grep("Supportive|Approved|Supported",
+                               hpar_data[, "Reliability"])
 
-        if (length(undetected) >= 1) {
-            # if the gene is undetected in some tissues
-            if (nrow(tissues) - length(undetected) > 1) {
-                tissues_detected = tissues[-c(undetected), 3]
-            } else if (nrow(tissues) - length(undetected) == 1) {
-                tissues_detected = tissues[-c(undetected), ][3]
-            } else if (nrow(tissues) - length(undetected) == 0) {
-                tissues_detected = "undetected"
-            }
-        } else {
-            # If the gene is detected in all tissues
-            tissues_detected = tissues[, 3]
-        }
-    }
-    tissues_detected = unique(as.character(tissues_detected))
+     common_index = intersect(tissue_index, reliability_index)
 
-    if (length(intersect(tissue, tissues_detected)) >= 1) {
-        return("gene_wanted")
+     if(length(common_index) == 0) {
+       stop("Tissue-filtering failed: tissue seems to be invalid")
+     }
+     hpar_data_filtered = hpar_data[common_index, ]
+     ensembl_in_hpar = intersect(ensembl, hpar_data_filtered[, "Gene"])
 
-    } else {
-        return("gene_unwanted")
-    }
+     if(length(ensembl_in_hpar) == 0) {
+         stop("Tissue-filtering failed: none of the genes seems to be in HPA")
+     }
+
+     find_index_hpar = function(name, all_names) {
+         return(which(all_names == name))
+     }
+
+     my_hpar_ind = unique(unlist(lapply(ensembl_in_hpar, find_index_hpar,
+                                        hpar_data_filtered[, "Gene"])))
+
+     my_hpar_data = hpar_data_filtered[my_hpar_ind, ]
+
+     get_tissue_level = function(ensembl_gene, my_hpar_data, alternative_levels) {
+
+         ind = which(my_hpar_data[, "Gene"] == ensembl_gene)
+         levels_gene = unique(as.character(my_hpar_data[ind, "Level"]))
+
+         if (length (intersect(alternative_levels, levels_gene)) == 0) {
+             return("undetected")
+         }
+         return("detected")
+     }
+
+     alternative_levels = setdiff(levels(hpar_data[, "Level"]), "Not detected")
+     tissue_ans = sapply(ensembl_in_hpar, get_tissue_level,
+                         my_hpar_data, alternative_levels)
+
+     if ("undetected" %in% tissue_ans) {
+         unwanted_ensembl = ensembl_in_hpar[tissue_ans == "undetected"]
+         rownames(gene_enSall) = gene_enSall[, 3]
+         genes_not_in_tissue = as.character(gene_enSall[unwanted_ensembl, 1])
+         return(genes_not_in_tissue)
+     }
+
+     genes_not_in_tissue = NULL
+     return(genes_not_in_tissue)
 }
 
 #################### signaling_matrix ####################
@@ -189,7 +207,7 @@ signaling_matrix = function(global_network_all, tissue, organism_code,
                         gene_enSall[index, 1] = genes_found[i]
                       }
                       ## Remove duplicated ensembl IDs#
-                      index_wanted = sapply(symbols, unique_symbol_ensembl,gene_enSall)
+                      index_wanted = sapply(symbols, unique_symbol_ensembl, gene_enSall)
 
                       gene_enSall = gene_enSall[index_wanted, ]
                       gene_enSall = na.omit(gene_enSall)
@@ -216,35 +234,25 @@ signaling_matrix = function(global_network_all, tissue, organism_code,
                   message(to_print)
 
                 } else {
-                  m_value = ensembl[round(0.5 * length(ensembl))]
-                  f_value = ensembl[length(ensembl)]
-                  message("Filtering genes by tissue:")
-                  response_filter = sapply(ensembl, filter_genes_tissue,
-                    tissue, m_value = m_value, f_value = f_value)
-                  index_unwanted = as.numeric(which("gene_unwanted" == response_filter))
+                  message("Filtering genes by tissue")
+                  genes_not_in_tissue = filter_genes_tissue_updated (gene_enSall, tissue)
 
-                  if (length(index_unwanted) > 0) {
-                    # there are undetected genes
-                    genes_not_in_tissue = as.character(gene_enSall[index_unwanted, 1])
+                  if(!is.null(genes_not_in_tissue)) {
+                      ## Remove edges not in tissue
+                      edges_not_in_tissueL = sapply(lapply(split(network_edges, row(network_edges)),
+                                                           intersect, y = genes_not_in_tissue), length)
+                      edges_not_in_tissueL = as.vector (edges_not_in_tissueL)
+                      edges_not_in_tissue = unique(which(edges_not_in_tissueL >= 1))
 
-                    ## Remove edges that contain undetected genes
-                    edges_not_in_tissueL = sapply(lapply(split(network_edges, row(network_edges)),
-                                                         intersect, y = genes_not_in_tissue), length)
-                    edges_not_in_tissueL = as.vector (edges_not_in_tissueL)
-                    edges_not_in_tissue = unique(which(edges_not_in_tissueL >= 1))
-
-                    if (nrow(network_edges) > length(edges_not_in_tissue)) {
-                      network_edges = network_edges[-c(edges_not_in_tissue), ]
-
-                    } else {
-                      # None of the edges can be kept after filtering
-                      to_print = paste("Filtering was ignored because",
-                        "none of the signaling genes is", "detected in the",
-                        "target tissue")
-                      warning(to_print, "\n")
-                    }
+                      if (nrow(network_edges) > length(edges_not_in_tissue)) {
+                          network_edges = network_edges[-c(edges_not_in_tissue), ]
+                      } else {
+                          stop ("All signaling edges were removed during tissue-filtering")
+                      }
+                  } else {
+                      message("All signaling genes satisfy the tissue-filtering parameters")
                   }
-                }
+               }
             }
             network_edges_new_2 = matrix(network_edges, ncol = 2)
 

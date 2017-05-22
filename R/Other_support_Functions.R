@@ -176,6 +176,8 @@ MS_FilterNetwork = function(network_table, mode = "all", type, target_node = NUL
     }
 
     # Force network_table to be a unique 2-column matrix
+    network_tableBU = network_table # in case it comes from MS2
+    network_table = network_table[, 1:2] # in case it comes from MS2
     network_table = check_matrix(network_table)
 
     network_i = graph.data.frame(network_table, directed = TRUE)
@@ -242,17 +244,16 @@ MS_FilterNetwork = function(network_table, mode = "all", type, target_node = NUL
     edges_unwanted = which(edges_response == "unwanted")
 
     if (length(edges_unwanted) >= 1) {
-        network_table2 = network_table[-c(edges_unwanted), ]
-        network_table2 = matrix(network_table2, ncol = 2)
-        colnames(network_table2) = c("node1", "node2")
+        network_table2 = network_tableBU[-c(edges_unwanted), ]
+        network_table2 = matrix(network_table2, ncol = ncol(network_tableBU))
+        colnames(network_table2) = colnames(network_tableBU)
     } else {
       network_table2 = network_table
       warning ("Filtering was ignored: check filtering parameters")
     }
-    colnames(network_table2) = c("node1", "node2")
 
     ## Report features
-    network_features(network_table2)
+    network_features(network_table2[, 1:2])
 
     return(network_table2)
 
@@ -266,6 +267,7 @@ MS_NodeBW = function(network_table, mode = "all", normalized = TRUE) {
     check_mode_type(mode2 = mode)
 
     ## Force network_table to be a unique 2-column matrix
+    network_table = network_table[, 1:2] # in case it comes from MS2.
     network_table = check_matrix(network_table)
 
     network_i = graph.data.frame(network_table, directed = TRUE)
@@ -361,7 +363,7 @@ MS_ToCytoscape = function(network_table, organism_code, names = TRUE,
     file_nameN = paste(file_name, "Network.txt", sep = "")
 
     write.table(cytoscape, file_nameN, row.names = FALSE, sep = "\t",
-                quote = FALSE, col.names = FALSE)
+                quote = FALSE, col.names = TRUE)
 
     ## Create network attributes
     nodes = unique(as.vector(network_table))
@@ -378,7 +380,7 @@ MS_ToCytoscape = function(network_table, organism_code, names = TRUE,
     file_nameAtype = paste(file_name, "AttributesType.txt", sep = "")
 
     write.table(node_typeM, file_nameAtype, row.names = FALSE, sep = "\t",
-                quote = FALSE, col.names = FALSE)
+                quote = FALSE, col.names = TRUE)
 
     ## Create node attribute to HL genes of interest
     if (length(target_nodes) > 0) {
@@ -396,7 +398,7 @@ MS_ToCytoscape = function(network_table, organism_code, names = TRUE,
         file_nameAtarget = paste(file_name, "AttributesTarget.txt", sep = "")
 
         write.table(node_HLM, file_nameAtarget, row.names = FALSE, sep = "\t",
-                    quote = FALSE, col.names = FALSE)
+                    quote = FALSE, col.names = TRUE)
     }
     return(cytoscape)
 }

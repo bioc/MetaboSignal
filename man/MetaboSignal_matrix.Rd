@@ -9,8 +9,8 @@ in column 2). Nodes represent four different molecular entities: metabolic-genes
 kinases), reactions or metabolites. It is possible to build a tissue-specific
 network-table that excludes signaling genes that are not expressed in a given
 tissue. Tissue expression data is obtained using the hpar package, which is
-based on the The Human Protein Atlas database. The genes "non detected" in the
-target tissue (reliability = supportive) are neglected.
+based on the The Human Protein Atlas database. The genes "not detected" in the
+target tissue (reliability = "approved"") are neglected.
 
 The network-table generated with this function can be customized based on several
 criteria. For instance, undesired nodes can be removed or replaced using the
@@ -40,7 +40,9 @@ MetaboSignal_matrix(metabo_paths, signaling_paths, organism_name, tissue = "all"
   \item{tissue}{character vector containing the name(s) of the target tissue(s).
   By default, tissue = "all" indicating that signaling gene nodes will not be
   filtered by tissue expression. Otherwise, possible tissues are those included in
-  the dataset hpaNormalTissue (see levels(hpaNormalTissue[,"Tissue"])).
+  the dataset hpaNormalTissue (see levels(hpaNormalTissue[,"Tissue"])). Signaling
+  genes not detected in none of the target tissue(s) (reliability = "approved")
+  will be removed from the network.
   }
   \item{expand_genes}{logical scalar indicating whether the gene nodes will
   represent orthology IDs (FALSE) or organim-specific gene IDs (TRUE). By default,

@@ -1,4 +1,4 @@
-CHANGES IN VERSION 1.5.2
+CHANGES IN VERSION 1.1.6
 -----------------------
   o MetaboSignal includes a new function: "MS_interactionType()". This function
   allows getting the interaction subtype between signaling nodes. The output
@@ -7,4 +7,9 @@ CHANGES IN VERSION 1.5.2
 
   o "MS_GetShortestpaths()" has been modified and now the output shortest path(s)
   can be represented as a network-table (i.e. 2-column matrix).
+
+CHANGES IN VERSION 1.7.1
+-----------------------
+  o Significant improvements in the tissue-filtering option from “MetaboSignal_matrix()”.
+  o Cityscape .txt files are not exported with a header. 
 
