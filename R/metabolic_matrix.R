@@ -5,7 +5,8 @@ link_reaction_gene = function(enzyme, gene, ko, reactionTable) {
     index = which(reactionTable[, 1] == enzyme)
     if (length(index) > 0) {
         reactions = reactionTable[index, 2]
-        line = cbind(reactions, rep(enzyme, length(reactions)), rep(gene, length(reactions)),
+        line = cbind(reactions, rep(enzyme, length(reactions)),
+                     rep(gene, length(reactions)),
                      rep(ko, length(reactions)))
         line = matrix(line, ncol = 4, nrow = length(reactions))
     } else {

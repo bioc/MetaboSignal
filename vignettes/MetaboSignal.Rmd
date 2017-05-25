@@ -20,7 +20,7 @@ knitr::opts_chunk$set(message=FALSE, fig.path='figures/')
 <p style="text-align:center;font-size:200%;color:Red"> MetaboSignal </p>
 <p style="text-align:center;font-size:90%;color:Gray"> Andrea Rodriguez Martinez, 
 Rafael Ayala, Joram M. Posma, Ana L. Neves, Marc-Emmanuel Dumas </p>
-<p style="text-align:center;font-size:90%;color:Gray"> July 21, 2016 </p>
+<p style="text-align:center;font-size:90%;color:Gray"> May 25, 2017 </p>
 <br>
 
 # Abstract
@@ -35,7 +35,7 @@ Rafael Ayala, Joram M. Posma, Ana L. Neves, Marc-Emmanuel Dumas </p>
 
 # Software features
 
-<p style="font-size:110%">The metabolic and signaling KEGG pathways of interest are parsed using the KEGGgraph package [@zhang2009kegggraph], to generate organism-specific metabolic and signaling directed network-tables (i.e. 2-column matrix). The user can decide whether gene nodes will represent organism-specific KEGG gene IDs or orthology IDs. Importantly, MetaboSignal allows building tissue-specific signaling networks, where genes not expressed in a given target tissue are neglected. Tissue filtering is achieved using the hpar package [@gattohpar], which is based on data from the Human Protein Atlas database.</p>
+<p style="font-size:110%">The metabolic and signaling KEGG pathways of interest are parsed using the KEGGgraph package [@zhang2009kegggraph], to generate organism-specific metabolic and signaling directed network-tables (i.e. 3-column matrix). The user can decide whether gene nodes will represent organism-specific KEGG gene IDs or orthology IDs. Importantly, in the case of human, MetaboSignal allows building tissue-specific signaling networks, where genes not expressed in a given target tissue are neglected. Tissue filtering is achieved using the hpar package [@gattohpar], which is based on data from the Human Protein Atlas database.</p>
 
 <p style="font-size:110%">The metabolic and signaling networks are then merged to build a MetaboSignal network, which can be further customized according to different criteria. For instance, undesired nodes can be removed or nodes representing chemical isomers of the same compound can be clustered into a common node. MetaboSignal evaluates network topology (e.g. node betweeness) and calculates a distance matrix [@csardi2006igraph] containing the shortest path lengths from a list of genes to a list of metabolites of interest. MetaboSignal also builds subnetworks containing betweenness-ranked shortest paths from a list of genes to a list of metabolites (presumably selected based on the distance matrix).</p>
 
@@ -53,18 +53,18 @@ Rafael Ayala, Joram M. Posma, Ana L. Neves, Marc-Emmanuel Dumas </p>
 
 <p style="font-size:110%">We built a rat-specific MetaboSignal network by merging two metabolic pathways: "glycolysis"  and "inositol phosphate metabolism", with two signaling pathways: "insulin signaling pathway" and "PI3K-Akt signaling pathway".</p>
 
-<p style="font-size:110%">We used the function "MS_FindKEGG( )" to find the "organism_code" of the rat and the IDs of the pathways of interest.</p>
+<p style="font-size:110%">We used the function "MS_keggFinder( )" to find the "organism_code" of the rat and the IDs of the pathways of interest.</p>
 
 ```{r include = FALSE}
 library(MetaboSignal)
 ```
 
 ```{r, message = FALSE, tidy = TRUE}
-MS_FindKEGG(KEGG_database="organism", match = "rattus")
+MS_keggFinder(KEGG_database="organism", match = "rattus")
 ```
 
 ```{r tidy = TRUE}
-MS_FindKEGG(KEGG_database ="pathway", match = c("glycol", "inositol phosphate","insulin signal", "akt"), organism_code = "rno")
+MS_keggFinder(KEGG_database ="pathway", match = c("glycol", "inositol phosphate","insulin signal", "akt"), organism_code = "rno")
 ```
 
 <p style="font-size:110%"> Based on this, </p>
@@ -77,43 +77,30 @@ signaling_paths <- c("rno04910", "rno04151")
 
 ## Build MetaboSignal network-table
 
-<p style="font-size:110%">We used the selected metabo_paths and signaling_paths to build a MetaboSignal network-table. Since we focused on an adipose tissue dataset, we decided to exclude signaling genes not expressed in soft tissue. </p>
+<p style="font-size:110%">We used the selected metabo_paths and signaling_paths to build a MetaboSignal network-table. </p>
 
 ```{r tidy = TRUE, tidy.opts=list(indent = 4, width.cutoff = 70), results='asis',eval=FALSE}
-# Adipose tissue-filtered network
-MetaboSignal_table <- MetaboSignal_matrix(metabo_paths = metabo_paths, 
-                                          signaling_paths = signaling_paths, 
-                                          organism_name = "rat", 
-                                          tissue = c("soft tissue 1", "soft tissue 2" ))
-
-# Unfiltered-network
-MetaboSignal_tableUnfiltered <- MetaboSignal_matrix(metabo_paths = metabo_paths, 
-                                                    signaling_paths = signaling_paths)
-
-# Check signaling-genes removed by tissue-filtering
-neglected_genes <- MS_ChangeNames(setdiff(as.vector(MetaboSignal_tableUnfiltered), 
-                                          as.vector(MetaboSignal_table)), "rno")
+MetaboSignal_table <- MS_keggNetwork(metabo_paths = metabo_paths, 
+                                     signaling_paths = signaling_paths)
 
 ```
 
-<p style="font-size:110%">MetaboSignal_table is a two-column matrix where each row represents an edge between two nodes (from the node in column 1 to node in column 2). Since we did not use the option "expand_genes", the gene nodes of the network represent orthology KEGG IDs. Note that clustering gene-isoforms by orthology IDs is a very convenient strategy to reduce network dimensionality without loosing biological information.  </p>
-
-<p style="font-size:110%"> The vector neglected_genes contains the signaling genes were excluded of the network for not being expressed in adipocytes. Examples of these genes are: *Kit*, *Fgfr3*, *Elk1*, *Csf3r*, *Il4r*, *Nos3*. </p>
+<p style="font-size:110%">MetaboSignal_table is a three-column matrix where each row represents an edge between two nodes (source to target). The third column indicates the type of interaction. Since we did not use the option "expand_genes", the gene nodes of the network represent orthology KEGG IDs. Note that clustering gene-isoforms by orthology IDs is a very convenient strategy to reduce network dimensionality without loosing biological information.  </p>
 <br>
 
 ## Customize MetaboSignal network-table
 
-<p style="font-size:110%">Given that we were not interest in discriminating between different isomers of D-glucose, we used the function "MS_ReplaceNodes( )" to group the IDs of alpha-D-glucose ("cpd:C00267"), beta-D-glucose ("cpd:C00221") and D-glucose ("cpd:C00031").</p>
+<p style="font-size:110%">Given that we were not interest in discriminating between different isomers of D-glucose, we used the function "MS_replaceNodes( )" to group the IDs of alpha-D-glucose ("cpd:C00267"), beta-D-glucose ("cpd:C00221") and D-glucose ("cpd:C00031").</p>
 
 ```{r tidy = TRUE}
-MetaboSignal_table <- MS_ReplaceNode(node1 = c("cpd:C00267", "cpd:C00221"), 
+MetaboSignal_table <- MS_replaceNode(node1 = c("cpd:C00267", "cpd:C00221"), 
                                      node2 = "cpd:C00031", MetaboSignal_table)
 ```
 
-<p style="font-size:110%">We used the function "MS_FindMappedNodes( )" to check that the glucose isomers had been successfully clustered.</p>
+<p style="font-size:110%">We used the function "MS_findMappedNodes( )" to check that the glucose isomers had been successfully clustered.</p>
 
 ```{r tidy = TRUE, message = FALSE}
-MS_FindMappedNodes(nodes = c("cpd:C00267", "cpd:C00221", "cpd:C00031"),
+MS_findMappedNodes(nodes = c("cpd:C00267", "cpd:C00221", "cpd:C00031"),
                    MetaboSignal_table)
 ```
 <br>
@@ -124,27 +111,32 @@ MS_FindMappedNodes(nodes = c("cpd:C00267", "cpd:C00221", "cpd:C00031"),
 
 
 ```{r tidy = TRUE, message = FALSE}
-MetaboSignal_distances(MetaboSignal_table, organism_code = "rno", 
-                       source_genes = c("303565", "65038", "309179"), 
-                       target_metabolites = "cpd:C00031", names=TRUE)
+## Get KEGG IDs
+MS_convertGene(genes = c("303565", "65038", "309179"), organism_code = "rno", organism_name = "rat", output = "matrix")
+MS_distances(MetaboSignal_table, organism_code = "rno", 
+             source_genes = c("K01084", "K15909", "K11584"), 
+             target_metabolites = "cpd:C00031", names = TRUE)
 ```
 <br>
 
 ## Build shortest-paths subnetwork
 
-<p style="font-size:110%">Finally, we used the function "MetaboSignal_NetworkCytoscape( )" to build a subnetwork containing betweenness-ranked shortest paths from our genes of interest: *G6pc3* (303565), *Ship2* (65038) or *Ppp2r5b* (309179) to D-glucose ("cpd:C00031").</p>
+<p style="font-size:110%">Finally, we used the function "MetaboSignal_shortestPathsNetwork( )" to build a subnetwork containing betweenness-ranked shortest paths from our genes of interest: *G6pc3* (303565), *Ship2* (65038) or *Ppp2r5b* (309179) to D-glucose ("cpd:C00031").</p>
 
 ```{r tidy = TRUE, tidy.opts=list(indent = 4, width.cutoff = 70), eval = FALSE }
-subnetwork <- MetaboSignal_NetworkCytoscape(MetaboSignal_table, organism_code="rno",
-                                            source_genes = c("303565", "65038", "309179"), 
-                                            target_metabolites = "cpd:C00031", type = "bw", 
-                                            file_name = "MSCytoscape")
+MS_shortestPathsNetwork(MetaboSignal_table, organism_code="rno",
+                        source_nodes = c("K01084", "K15909", "K11584"), 
+                        target_nodes = "cpd:C00031", type = "bw", 
+                        file_name = "MS")
 ```
 <br>
-<p style="font-size:110%">This function exported three files in the working directory: "MSCytoscapeNetwork.txt",
-"MSCytoscapeAttributesType.txt", and "MSCytoscapeAttributesTarget.txt". These files were imported into cytoscape using the options: "Network from Table Text/ MS Excel" and "Attribute from Table Text/MS Excel". The attribute files were used to customize the network (e.g. the nodes were coloured based on the molecular entity they represent), producing a final graph that looks as follows:</p>
+<p style="font-size:110%">This function exported three files in the working directory: "MS_Network.txt",
+"MS_NodesType.txt", and "MS_TargetNodes.txt". These files were imported into cytoscape using the options: 
+file-import-network and file-import-table. The attribute files were used to customize the network 
+(e.g. the nodes were coloured based on the molecular entity they represent), producing a final graph that 
+looks as follows:</p>
 
-![](./figures/network.jpg)
+![](./figures/network.png)
 
 
 
