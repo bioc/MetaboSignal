@@ -90,7 +90,7 @@ data(MetaboSignal_table)
 subnet_first <- MS_shortestPathsNetwork(MetaboSignal_table, organism_code = "rno",
                                          source_nodes = "K01084",
                                          target_nodes = c("cpd:C00022", "cpd:C00267"),
-                                         mode = "SP", type = "all")
+                                         mode = "SP", type = "first")
 
 subnet_all <- MS_shortestPathsNetwork(MetaboSignal_table, organism_code = "rno",
                                        source_nodes = "K01084",

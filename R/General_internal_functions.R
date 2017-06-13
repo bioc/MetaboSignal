@@ -49,10 +49,10 @@ Match = function(x, want) {
 #The goal of this function is to make sure that the network_table is a 2 column matrix
 check_matrix_v2 = function(network_table, n = 3) {
     if (!is.matrix(network_table)) {
-        stop ("network_table must be a 3-column matrix: source, target, type")
+        stop ("network_table must be a 3-column matrix")
     }
     if (ncol(network_table) < n) {
-        stop ("network_table must be a 3-column matrix: source, target, type")
+        stop ("network_table must be a 3-column matrix")
     }
 }
 
@@ -292,7 +292,7 @@ From_geneID_to_symbol = function(ID) {
             name = sort(name, decreasing = FALSE)
         }
         name = name[1]  # Selects only the first gene name
-        name = toupper(name)
+        #name = toupper(name)
         name = gsub(" ", "", name)
     } else {
         name = ID

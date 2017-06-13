@@ -176,6 +176,7 @@ MS_removeDrugs = function(network_table) {
           network_features(network_table[, 1:2])
           return(network_table)
     }
-    return("Drug nodes not found")
+    message("Drug nodes not found")
+    return(network_table)
 }
 

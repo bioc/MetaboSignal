@@ -105,19 +105,19 @@ MS_exportCytoscape = function(network_table, organism_code, names = TRUE,
     colnames(node_type) = c("node", "type")
     rownames(node_type) = NULL
 
-    if (names == TRUE) {
-        old_nodes = unique(as.vector(network[, 1:2]))
-        new_nodes = unique(as.vector(cytoscape_net[, 1:2]))
+    if (names == TRUE) { # This has been updated
+        on_nodes = unique(cbind(as.vector(network[, 1:2]),
+                              as.vector(cytoscape_net[, 1:2])))
+        # in case the several KEGG IDs are associated to the same symbol
         for (i in 1:nrow(node_type)) {
-            node_type[i, 1] = new_nodes[old_nodes == node_type[i,
-                1]]
+            ind = which(on_nodes[, 1] == node_type[i, 1])[1]
+            node_type[i, 1] = on_nodes[ind, 2]
         }
-        # node_type = MS_changeNames(node_type, organism_code)
         colnames(node_type) = c("node", "type")
         rownames(node_type) = NULL
     }
 
-    node_typeDF = as.data.frame(node_type, rownames = NULL)
+    node_typeDF = unique(as.data.frame(node_type, rownames = NULL))
     file_nameNT = paste(file_name, "NodesType.txt", sep = "_")
 
     write.table(node_typeDF, file_nameNT, row.names = FALSE,
@@ -127,10 +127,11 @@ MS_exportCytoscape = function(network_table, organism_code, names = TRUE,
     if (!is.null(targets)) {
         if (names == TRUE) {
             for (i in 1:length(targets)) {
-                targets[i] = new_nodes[old_nodes == targets[i]]
+                ind = which(on_nodes[, 1] == targets[i])[1]
+                targets[i] = on_nodes[ind, 2]
             }
         }
-        targetDF = as.data.frame(cbind(targets, "target"), rownames = NULL)
+        targetDF = unique(as.data.frame(cbind(targets, "target"), rownames = NULL))
         colnames(targetDF) = c("node", "target")
         file_nameT = paste(file_name, "TargetNodes.txt", sep = "_")
         write.table(targetDF, file_nameT, row.names = FALSE,
