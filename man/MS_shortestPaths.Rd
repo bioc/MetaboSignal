@@ -13,11 +13,11 @@ MS_shortestPaths(network_table, source_node, target_node, mode = "out",
   \item{network_table}{three-column matrix where each row represents and edge
   between two nodes. See function "MS_keggNetwork( )".
   }
-  \item{source_node}{character vector containing the KEGG ID of the node from which
-  the shortest paths will be calculated.
+  \item{source_node}{character vector containing the node from which the shortest
+  paths will be calculated.
   }
-  \item{target_node}{character vector containing the KEGG ID of node to which the
-  shortest path will be calculated.
+  \item{target_node}{character vector containing the node to which the shortest
+  path will be calculated.
   }
   \item{mode}{character constant indicating whether a directed or an undirected
   network will be considered. "all" indicates that all the edges of the network
@@ -26,23 +26,20 @@ MS_shortestPaths(network_table, source_node, target_node, mode = "out",
   be considered as directed except the edges linked to target metabolite, which
   will be considered as undirected. The difference between the "out" and "SP"
   options, is that the latter aids reaching target metabolites that are substrate
-  of irreversible reactions. By default, mode = "out".
-  }
+  of irreversible reactions.}
   \item{type}{indicates whether all shortest paths or a single shortest path will
   be considered when there are several shortest paths between the source_node and
   the target_node.  If type = "all", all shortest paths will be considered. If
   type = "first" a single path will be considered. If type = "bw" the path with
   the highest betweenness score will be considered. The betweenness score is
   calculated as the average betweenness of the gene nodes of the path.
-  Using type = "bw" increases the time required to compute this function. By
-  default, type = "first".
+  Using type = "bw" increases the time required to compute this function.
   }
 }
 \value{
-By default, a vector or a matrix where each row contains a shortest path from the
-source_node to the target_node. If network = TRUE, the function returns matrix where
-each row represents an edge between two nodes. KEGG IDs can be transformed into
-common names using the function "MS_changeNames( )".
+A vector or a matrix where each row contains a shortest path from the
+source_node to the target_node. KEGG IDs can be transformed into common names
+using the function "MS_changeNames( )".
 }
 \references{
 G. Csardi and T. Nepusz (2015). igraph package, The Comprehensive R Archive

@@ -22,8 +22,7 @@ A list reporting which genes or metabolites can or cannot be mapped onto the net
 \references{
 Carlson, M. org.Hs.eg.db: Genome wide annotation for Human.R package version 3.2.3.
 
-Mark, A., Thompson, R. and Wu, C. (2014) mygene: Access MyGene.Info_ services.
-R package version 1.6.0.
+Mark, A., et al.(2014) mygene: Access MyGene.Info_ services. R package version 1.6.0.
 
 http://www.kegg.jp/kegg/docs/keggapi.html
 }

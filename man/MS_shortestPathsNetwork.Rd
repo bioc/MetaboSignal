@@ -31,18 +31,17 @@ MS_shortestPathsNetwork(network_table, organism_code, source_nodes, target_nodes
   to which the shortest paths will be calculated. Compound KEGG IDs can be obtained using
   the function "MS_keggFinder( )".
   }
-  \item{mode}{character constant indicating whether a directed or an undirected
-  network will be considered. "all" indicates that all the edges of the network
-  will be considered as undirected. "out" indicates that all the edges of the
-  network will be considered as directed. "SP" indicates that all network will
-  be considered as directed except the edges linked to target metabolite, which
-  will be considered as undirected. The difference between the "out" and the
+  \item{mode}{character constant indicating whether a directed (mode = "out") or
+  semi-directed (mode = "SP") network will be considered. "out" indicates that
+  all the edges of the network will be considered as directed. "SP" indicates that
+  all network will be considered as directed except the edges linked to target_node,
+  which will be considered as undirected. The difference between the "out" and the
   "SP" options, is that the latter aids reaching target metabolites that are
   substrates of irreversible reactions.
   }
   \item{type}{character constant indicating whether all shortest paths or a
   single shortest path will be considered when there are several shortest paths
-  between a source_gene and a target_metabolite. If type = "all", all shortest
+  between a source node and a target node. If type = "all", all shortest
   paths will be considered. If type = "first" a single path will be considered.
   If type = "bw" the path with the highest betweenness score will be considered.
   The betweenness score is calculated as the average betweenness of the gene
@@ -76,8 +75,7 @@ using the function "graph.data.frame( )" from igraph.
 Csardi, G. & Nepusz, T. (2006). The igraph software package for complex network
 research. InterJournal, Complex Systems, 1695.
 
-Shannon, P., Markiel, A., Ozier, O., Baliga, N.S., Wang, J.T., Ramage, D., Amin,
-N. & Ideker, B.S.T. (2003). Cytoscape: a software environment for integrated
+Shannon, P., et al. (2003). Cytoscape: a software environment for integrated
 models of biomolecular interaction networks. Genome Research, 13, 2498-2504.
 }
 \examples{

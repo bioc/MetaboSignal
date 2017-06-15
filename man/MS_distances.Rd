@@ -27,12 +27,14 @@ MS_distances(network_table, organism_code, mode = "SP", source_genes = "all",
   of irreversible reactions.}
   \item{source_genes}{character vector containing the genes from which the
   shortest paths will be calculated. Remember that entrez IDs or gene symbols
-  can be transformed into KEGG IDs using the function "MS_convertGene( )".}
+  can be transformed into KEGG IDs using the function "MS_convertGene( )".
+  By default, source_genes = "all", indicating that all the genes of the network
+  will be used.}
   \item{target_metabolites}{character vector containing the KEGG IDs of the
   metabolites to which the shortest paths will be calculated. Compound KEGG IDs
   can be obtained using the function "MS_keggFinder( )". By default,
-  metabolites = "all", indicating that all metabolites of the network will be
-  used.}
+  target_metabolites = "all", indicating that all the metabolites of the network
+  will be used.}
   \item{names}{logical scalar indicating whether the metabolite IDs or gene KEGG
   IDs will be transformed into common metabolite names or gene symbols. Reaction
   IDs remain unchanged.}

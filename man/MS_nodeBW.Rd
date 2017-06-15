@@ -12,11 +12,11 @@ MS_nodeBW(network_table, mode = "all", normalized = TRUE)
   between two nodes. See function "MS_keggNetwork( )".
   }
   \item{mode}{character constant indicating whether a directed ("out") or
-  undirected ("all") network will be considered. By default, mode = "all".
+  undirected ("all") network will be considered.
   }
   \item{normalized}{logical scalar indicating whether to normalize the betweeness
   scores. If TRUE, normalized betweenness scores will be returned. If FALSE, raw
-  betweenness scores will be returned. By default, normalized = TRUE.
+  betweenness scores will be returned.
   }
 }
 \value{
