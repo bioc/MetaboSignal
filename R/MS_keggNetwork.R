@@ -61,16 +61,16 @@ get_reaction_type = function(edge_compound, edge_compound_rev) {
         rev_edges = do.call(rbind, strsplit(reversible_edges, "_"))
         edges_direc = cbind(rev_edges, "compound:reversible")
 
-        if (length(irreversible_edges) > 0) { # no irreversible edges
+        if (length(irreversible_edges) > 0) { # irreversible edges
             irev_edges = do.call(rbind, strsplit(irreversible_edges, "_"))
             irev_edges = cbind(irev_edges, "compound:irreversible")
             edges_direc = rbind(edges_direc, irev_edges)
         }
-    } else {
+    } else { # all edges are irreversible
         irev_edges = do.call(rbind, strsplit(edge_compound, "_"))
-        edges_direc = cbind(irev_edges, "compound:reversible")
+        edges_direc = cbind(irev_edges, "compound:irreversible")
     }
-    colnames(edges_direc) = c("source", "target", "type")
+    colnames(edges_direc) = c("source", "target", "interaction_type")
     rownames(edges_direc) = NULL
 
     return(edges_direc)
@@ -121,7 +121,7 @@ map_interactions = function(MetaboSignal_table, interaction_type) {
         gene_net = cbind(MetaboSignal_table[ , c(1:2)], signaling_interactions)
         merged_net = gsub("_", "-", gene_net)
     }
-    colnames(merged_net) = c("source", "target", "type")
+    colnames(merged_net) = c("source", "target", "interaction_type")
     rownames(merged_net) = NULL
     merged_net[, 3] = paste("k", merged_net[, 3], sep = "_")
     return(merged_net)
