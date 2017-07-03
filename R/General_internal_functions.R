@@ -130,7 +130,7 @@ get_bw_score = function (node, BW_matrix) {
     if (length(index) > 0) {
         node_bw = as.numeric(BW_matrix[index, 2])
     } else {
-        node_bw = 0
+        node_bw = -1 # This has been changed (July 2017)
     }
     return(node_bw)
 }
@@ -140,8 +140,9 @@ get_global_BW_score = function (row, BW_matrix) {
     path_individual = as.character(row)
     BW = sapply(path_individual, get_bw_score, BW_matrix)
     score_BW = as.numeric(BW)
-    score_BW = sum(BW)/(length(BW)-sum(BW==0))
-
+    score_BW = score_BW[score_BW >= 0] ## This has been changed (July 2017)
+    #score_BW = sum(BW)/(length(BW)-sum(BW==0))
+    score_BW = sum(score_BW)/length(score_BW)
     return(score_BW)
 }
 
@@ -149,15 +150,17 @@ get_global_BW_score = function (row, BW_matrix) {
 BW_ranked_SP = function (all_paths, BW_matrix, networkBW_i, mode) {
 
     all_nodes = unique(as.vector(all_paths))
-    index_cpd = grep("cpd:", all_nodes)
+    index_cpd = grep("cpd:|dr:|gl:", all_nodes) # This has ben changed:July 2017
 
     if (length(index_cpd) > 0) {
     # This should be always true because if there are not
     # compounds in the network the function MetaboSignal_distances wont work.
         gene_nodes = all_nodes[-index_cpd]
-    } else (gene_nodes = all_nodes)
+    } else{
+        gene_nodes = all_nodes # This was changed: July 2017
+    }
 
-        gene_nodes = unique(gene_nodes)
+    gene_nodes = unique(gene_nodes)
 
     for (gene in gene_nodes) {
 
@@ -230,6 +233,9 @@ conv_entrez_kegg = function(genes, source = "entrez", organism_code) {
     } else {
         ncbi_genes = paste("ncbi-geneid:", genes, sep = "")
         res = keggConv(organism_code, ncbi_genes)
+    }
+    if(length(res) == 0) {
+        res = genes
     }
     return(res)
 }
