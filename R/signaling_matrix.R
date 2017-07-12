@@ -12,13 +12,12 @@ get_interactiontype = function(path) {
 
 #################### collapse_interactions ####################
 collapse_interactions = function(interaction, all_interactions) {
-  ind = which(all_interactions[, 1] == interaction[1] &
+    ind = which(all_interactions[, 1] == interaction[1] &
                 all_interactions[, 2] == interaction[2])
-  subtypes = sort(unique(all_interactions[ind, 3]))
-  subtype = paste(subtypes, collapse = "/")
-  subtype = gsub(" ", "-", subtype)
-  new_line = c(interaction[1], interaction[2], subtype)
-
+    subtypes = sort(unique(all_interactions[ind, 3]))
+    subtype = paste(subtypes, collapse = "/")
+    subtype = gsub(" ", "-", subtype)
+    new_line = c(interaction[1], interaction[2], subtype)
 }
 
 #################### build_signal_edges ####################
@@ -116,7 +115,8 @@ MS_interactionType = function(signaling_paths, all_paths) {
         return (NULL)
     }
 
-    interactionM = unique(as.matrix(paths_orgDF, ncol = 3))
+    interactionM = na.omit(unique(as.matrix(paths_orgDF, ncol = 3)))
+    # This has been updated-July 2017
     rownames(interactionM) = NULL
 
     ## Collapse interactions ##
