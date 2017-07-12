@@ -16,6 +16,10 @@ get_source = function(edge) {
 
 #################### get_molecule_type #######################
 get_molecule_type = function(node, organism_code) {
+    if( organism_code == "hsa" & !is.na(suppressWarnings(as.numeric(node)))) { # if it is entrez
+        node = paste("hsa:", node, sep = "")
+        #node = conv_entrez_kegg(node, source = "entrez", organism_code = "hsa")
+    }
     if (grepl("cpd:|dr:|gl", node) == TRUE) {
         node_type = "compound"
     } else if (grepl("rn", node) == TRUE) {
@@ -27,8 +31,7 @@ get_molecule_type = function(node, organism_code) {
         if (grepl("Error", lines[1]) == FALSE) {
             enzyme_lines = grep("EC:", lines[1:5])
             metabo_lines = grep("Metabolism", lines)
-            if (length(enzyme_lines) >= 1 & length(metabo_lines) >
-                0) {
+            if (length(enzyme_lines) >= 1 & length(metabo_lines) > 0) {
                 node_type = "metabolic-gene"
             } else (node_type = "signaling-gene")
         } else (node_type = "other")
@@ -74,8 +77,8 @@ MS_exportCytoscape = function(network_table, organism_code, names = TRUE,
     all_net_edges = paste(cytoscape_net[, 1], cytoscape_net[,
         2], cytoscape_net[, 3], sep = "_")
     sources = as.character(sapply(all_net_edges, get_source))
-    cytoscape_netDF = as.data.frame(cbind(cytoscape_net, database = sources),
-        rownames = NULL)
+    cytoscape_netDF = unique(as.data.frame(cbind(cytoscape_net, database = sources),
+        rownames = NULL)) # Make it unique in case there are duplicated common names
 
     file_nameN = paste(file_name, "Network.txt", sep = "_")
     write.table(cytoscape_netDF, file_nameN, row.names = FALSE,

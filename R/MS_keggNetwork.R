@@ -61,12 +61,12 @@ get_reaction_type = function(edge_compound, edge_compound_rev) {
         rev_edges = do.call(rbind, strsplit(reversible_edges, "_"))
         edges_direc = cbind(rev_edges, "compound:reversible")
 
-        if (length(irreversible_edges) > 0) { # irreversible edges
+        if (length(irreversible_edges) > 0) {
             irev_edges = do.call(rbind, strsplit(irreversible_edges, "_"))
             irev_edges = cbind(irev_edges, "compound:irreversible")
             edges_direc = rbind(edges_direc, irev_edges)
         }
-    } else { # all edges are irreversible
+    } else { # no reversible edges
         irev_edges = do.call(rbind, strsplit(edge_compound, "_"))
         edges_direc = cbind(irev_edges, "compound:irreversible")
     }
@@ -138,7 +138,7 @@ find_autoedges = function(edge) {
 
 #################### MS_keggNetwork ###################
 MS_keggNetwork = function(metabo_paths = NULL, signaling_paths = NULL,
-                           expand_genes = FALSE) {
+                           expand_genes = FALSE, convert_entrez = FALSE) {
 
     ########## 0)Preparatory steps###########
 
@@ -342,6 +342,25 @@ MS_keggNetwork = function(metabo_paths = NULL, signaling_paths = NULL,
                     MetaboSignal_interactions[r, c] = koTable[index, 2]
                 }
             }
+        }
+    }
+
+    ## Transform KEGG genes into entrez IDs
+    if (convert_entrez & expand_genes & organism_code == "hsa") {
+        message()
+        message("Transforming kegg ids into entrez ids")
+        message()
+
+        net_nodes = unique(as.vector(MetaboSignal_interactions[, 1:2]))
+        hsa_nodes = net_nodes[grep("hsa", net_nodes)]
+        genes_list = split(hsa_nodes, ceiling(seq_along(hsa_nodes)/100))
+        entrez_res = unlist(lapply(genes_list, conv_entrez_kegg, source = "kegg"))
+        entrez_ids = as.character(substr(entrez_res, 13, nchar(entrez_res)))
+        start = unlist(gregexpr(pattern = "hsa", names(entrez_res)))
+        kegg_ids = substr(names(entrez_res), start, nchar(names(entrez_res)))
+
+        for (i in seq_along(entrez_res)) {
+            MetaboSignal_interactions[MetaboSignal_interactions == kegg_ids[i]] = entrez_ids[i]
         }
     }
 

@@ -1,12 +1,12 @@
-\name{MS_filterNetwork}
-\alias{MS_filterNetwork}
+\name{MS_topologyFilter}
+\alias{MS_topologyFilter}
 \title{Filter network based on distances or betweenness}
 \description{
 This function allows reducing the dimensionality of a network, by removing nodes
 that do not meet the established distance and/or node betweenness criteria.
 }
 \usage{
-MS_filterNetwork(network_table, mode = "all", type, target_node, distance_th, bw_th)
+MS_topologyFilter(network_table, mode = "all", type, target_node, distance_th, bw_th)
 }
 \arguments{
   \item{network_table}{three-column matrix where each row represents and edge
@@ -41,16 +41,16 @@ research. InterJournal, Complex Systems, 1695.
 data(MetaboSignal_table)
 # Remove edges containing nodes with distance to D-glucose ("cpd:C00031") > 2
 
-network_filtered1 <- MS_filterNetwork(MetaboSignal_table, type = "distance",
-                                      target_node = "cpd:C00031",
-                                      distance_th = 2)
+network_filtered1 <- MS_topologyFilter(MetaboSignal_table, type = "distance",
+                                       target_node = "cpd:C00031",
+                                       distance_th = 2)
 
 # Remove edges containing nodes with distance to D-glucose ("cpd:C00031") > 2 or
 # normalized-betweenness < 0.00005
 
-network_filtered2 <- MS_filterNetwork(MetaboSignal_table, type = "all",
-                                      target_node = "cpd:C00031",
-                                      distance_th = 2, bw_th = 0.00005)
+network_filtered2 <- MS_topologyFilter(MetaboSignal_table, type = "all",
+                                       target_node = "cpd:C00031",
+                                       distance_th = 2, bw_th = 0.00005)
 
 # Note below that network_filtered1 has one edge more than network_filtered2. This is
 # because "cpd:C00031" has betweenness = 0, and therefore it is removed in network_filtered2:

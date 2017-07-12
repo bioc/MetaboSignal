@@ -154,8 +154,8 @@ MS_shortestPaths = function(network_table, source_node, target_node,
     }
 }
 
-#################### MS_filterNetwork ####################
-MS_filterNetwork = function(network_table, mode = "all", type, target_node = NULL,
+#################### MS_topologyFilter ####################
+MS_topologyFilter = function(network_table, mode = "all", type, target_node = NULL,
                             distance_th, bw_th) {
 
     # Check mode and type

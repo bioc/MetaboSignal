@@ -15,11 +15,11 @@ MS_exportCytoscape(network_table, organism_code, names = TRUE,
 }
 \arguments{
   \item{network_table}{three-column matrix where each row represents and edge
-  between two nodes. Nodes must be KEGG IDs, not common names. See functions
-  "MS_keggNetwork()".
+  between two nodes. Nodes must be KEGG IDs, not common names. See function
+  "MS_keggNetwork()". For human networks, Entrez gene IDs are also allowed.
   }
   \item{organism_code}{character vector containing the KEGG code for the organism
-  of interest. For example the KEGG code for the rat is "rno". See the function
+  of interest. For example the KEGG code for the rat is "rno". See function
   "MS_keggFinder( )".
   }
   \item{names}{logical scalar indicating whether the metabolite or gene IDs

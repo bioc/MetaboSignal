@@ -117,7 +117,7 @@ We next describe how MetaboSignal was used to provide a mechanistic explanation 
 We built a rat-specific MetaboSignal network by merging two metabolic pathways: “glycolysis” and “inositol phosphate metabolism”, with two signaling pathways: “insulin signaling pathway” and “PI3K-Akt signaling pathway”.
 </p>
 <p style="font-size:110%">
-We used the function “MS_keggFinder( )” to find the “organism_code” of the rat and the IDs of the pathways of interest.
+We used the function “MS_keggFinder( )” to find the “organism_code” of the rat and the IDs of the pathways of interest. Notice that the IDs of all metabolic and signaling pathways of a given organism can be retrieved by calling the function “MS_getPathIds()”.
 </p>
 <pre class="r"><code>MS_keggFinder(KEGG_database = &quot;organism&quot;, match = &quot;rattus&quot;)</code></pre>
 <pre><code>## $rattus
@@ -168,7 +168,7 @@ We used the selected metabo_paths and signaling_paths to build a MetaboSignal ne
 </p>
 <pre class="r"><code>MetaboSignal_table &lt;- MS_keggNetwork(metabo_paths = metabo_paths, signaling_paths = signaling_paths)</code></pre>
 <p style="font-size:110%">
-MetaboSignal_table is a three-column matrix where each row represents an edge between two nodes (source to target). The third column indicates the type of interaction. Since we did not use the option “expand_genes”, the gene nodes of the network represent orthology KEGG IDs. Note that clustering gene-isoforms by orthology IDs is a very convenient strategy to reduce network dimensionality without loosing biological information.
+MetaboSignal_table is a three-column matrix where each row represents an edge between two nodes (source to target). The third column indicates the type of interaction. Since we did not use the option “expand_genes”, the gene nodes of the network represent orthology KEGG IDs. Note that clustering gene-isoforms by orthology IDs is a very convenient strategy to reduce network dimensionality without losing biological information.
 </p>
 <p><br></p>
 </div>

@@ -10,7 +10,8 @@ MS_changeNames(nodes, organism_code)
 }
 \arguments{
   \item{nodes}{character vector or matrix containing the KEEG IDs of either
-  metabolites, genes (organism-specific or orthology), or reactions.}
+  metabolites, genes (organism-specific or orthology), or reactions. It also converts
+  human Entrez gene IDs into symbols.}
   \item{organism_code}{character vector containing the KEGG code for the organism
   of interest. For example the KEGG code for the rat is "rno". See the function
   "MS_keggFinder( )". This argument is ignored when nodes are metabolites.}

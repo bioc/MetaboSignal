@@ -26,7 +26,7 @@ MS_distances(network_table, organism_code, mode = "SP", source_genes = "all",
   options, is that the latter aids reaching target metabolites that are substrates
   of irreversible reactions.}
   \item{source_genes}{character vector containing the genes from which the
-  shortest paths will be calculated. Remember that entrez IDs or gene symbols
+  shortest paths will be calculated. Remember that Entrez IDs or gene symbols
   can be transformed into KEGG IDs using the function "MS_convertGene( )".
   By default, source_genes = "all", indicating that all the genes of the network
   will be used.}
@@ -61,6 +61,7 @@ distances_targets <- MS_distances(MetaboSignal_table, organism_code = "rno",
                                   names = TRUE)
 }
 # Distances from all genes to all metabolites of the network
+
 distances_all <- MS_distances(MetaboSignal_table, organism_code = "rno")
 }
 

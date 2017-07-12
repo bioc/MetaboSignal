@@ -24,8 +24,10 @@ MS_shortestPathsNetwork(network_table, organism_code, source_nodes, target_nodes
   "MS_keggFinder( )".
   }
   \item{source_nodes}{character vector containing the node IDs (typically genes)
-  from which the shortest paths will be calculated. Remember that entrez IDs and
-  gene symbols can be transformed into KEGG IDs with the function "MS_convertGene( )".
+  from which the shortest paths will be calculated. When using gene IDs make sure
+  that they are consistent with the format of the network (i.e. organism-specific gene
+  IDs or orthology IDs). Remember that Entrez IDs and gene symbols can be transformed
+  into KEGG IDs with the function "MS_convertGene( )".
   }
   \item{target_nodes}{character vector containing the nodes IDs (typically compounds)
   to which the shortest paths will be calculated. Compound KEGG IDs can be obtained using
@@ -86,13 +88,13 @@ data(MetaboSignal_table)
 # to a-D-Glucose ("cpd:C00267")
 
 subnet_first <- MS_shortestPathsNetwork(MetaboSignal_table, organism_code = "rno",
-                                         source_nodes = "K01084",
-                                         target_nodes = c("cpd:C00022", "cpd:C00267"),
-                                         mode = "SP", type = "first")
+                                        source_nodes = "K01084",
+                                        target_nodes = c("cpd:C00022", "cpd:C00267"),
+                                        mode = "SP", type = "first")
 
 subnet_all <- MS_shortestPathsNetwork(MetaboSignal_table, organism_code = "rno",
-                                       source_nodes = "K01084",
-                                       target_nodes = c("cpd:C00022", "cpd:C00267"),
-                                       mode = "SP", type = "all")
+                                      source_nodes = "K01084",
+                                      target_nodes = c("cpd:C00022", "cpd:C00267"),
+                                      mode = "SP", type = "all")
 }
 }

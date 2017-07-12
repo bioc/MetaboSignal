@@ -1,10 +1,10 @@
 \name{MS_convertGene}
 \alias{MS_convertGene}
-\title{Transform entrez IDs or gene symbols into KEGG IDs}
+\title{Transform Entrez IDs or gene symbols into KEGG IDs}
 \description{
-This function allows transforming entrez gene IDs or official gene symbols into
+This function allows transforming Entrez gene IDs or official gene symbols into
 KEGG IDs (orthology IDs or organism-specific gene IDs). The transformed KEGG IDs
-can be stored and used as source_genes in the functions "MS_distances( )"
+can be stored and used as source genes in the functions "MS_distances( )"
 or "MS_shortestpathsNetwork( )".
 }
 \usage{
@@ -12,9 +12,9 @@ MS_convertGene(genes, organism_code, organism_name, output = "vector",
                orthology = TRUE)
 }
 \arguments{
-  \item{genes}{character vector containing the entrez IDs or official symbols of
-  the genes of interest. All genes need to be in the same ID format (i.e. entrez
-  or symbols). It is preferable to use entrez IDs rather than gene symbols, since
+  \item{genes}{character vector containing the Entrez IDs or official symbols of
+  the genes of interest. All genes need to be in the same ID format (i.e. Entrez
+  or symbols). It is preferable to use Entrez IDs rather than gene symbols, since
   some gene symbols are not unique.}
   \item{organism_code}{character vector containing the KEGG code for the organism
   of interest. For example the KEGG code for the rat is "rno". See the function
@@ -25,21 +25,22 @@ MS_convertGene(genes, organism_code, organism_name, output = "vector",
   argument is only required when gene symbols are used.}
   \item{output}{character constant indicating whether the function will return a
   vector containing mapped and transformed KEGG IDs (output = "vector"), or a
-  matrix containing both mapped entrez IDs or gene symbols and their
+  matrix containing both mapped Entrez IDs or gene symbols and their
   corresponding KEGG IDs (output = "matrix").}
   \item{orthology}{logical scalar indicating whether the gene IDs will be
   transformed into orthology IDs or into organism-specific gene IDs.}
 }
 \value{
 A character vector containing mapped and transformed KEGG IDs or a matrix
-containing both mapped entrez IDs or gene symbols and their corresponding KEGG
+containing both mapped Entrez IDs or gene symbols and their corresponding KEGG
 IDs.
 }
 \references{
-Carlson M.(2016). org.Hs.eg.db: Genome wide annotation for Human, Bioconductor,
-v3.2.3.
+Carlson, M. org.Hs.eg.db: Genome wide annotation for Human. R package version
+>= 3.2.3.
 
-Mark A, et al.(2016). mygene: Access MyGene.Info_ services. Bioconductor, v1.8.0.
+Mark, A., et al. (2014) mygene: Access MyGene.Info_ services. R package version
+>= 1.6.0.
 
 http://www.kegg.jp/kegg/docs/keggapi.html
 }

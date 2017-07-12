@@ -2,7 +2,7 @@
 \alias{MS_removeDrugs}
 \title{Remove edges containing drug nodes}
 \description{
-This function allows removing edges containing drug nodes.
+This function allows removing edges containing drug ("dr:") nodes.
 }
 \usage{
 MS_removeDrugs(network_table)

@@ -180,3 +180,44 @@ MS_removeDrugs = function(network_table) {
     return(network_table)
 }
 
+################ MS_getPathIds ################
+MS_getPathIds = function(organism_code) {
+    path_ids = keggLink("pathway", organism_code)
+    path_ids = unique(gsub("path:", "", path_ids))
+    metabo_pathways = vector(mode = "list", length = length(path_ids))
+    signaling_pathways = vector(mode = "list", length = length(path_ids))
+
+    for(path in path_ids) {
+        #print(path)
+        res = keggGet(path)
+        class = res[[1]]$CLASS
+
+        if (!is.null(class)) {
+            if (grepl("Metabolism", class) & class != "Metabolism; Overview") {
+                metabo_pathways[[path]] = c(path, res[[1]]$NAME, class, "metabolic")
+            }
+            if (grepl("Metabolism", class) == FALSE &
+                grepl("Genetic Information Processing;", class) == FALSE) {
+                signaling_pathways[[path]] = c(path, res[[1]]$NAME, class, "signaling")
+            }
+        }
+    }
+
+    metabo_pathways = do.call(rbind, metabo_pathways)
+    signaling_pathways = do.call(rbind, signaling_pathways)
+
+    all_pathways = rbind(metabo_pathways, signaling_pathways)
+
+    colnames(all_pathways) = c("Path_id", "Path_description", "Path_category", "Path_type")
+    rownames(all_pathways) = NULL
+
+    file_name = paste(organism_code, "pathways.txt", sep = "_")
+
+    all_pathwaysDF = as.data.frame(all_pathways)
+
+    write.table(all_pathwaysDF, file_name, row.names = FALSE,
+                sep = "\t", quote = FALSE, col.names = TRUE)
+
+    return(all_pathways)
+}
+

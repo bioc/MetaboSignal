@@ -209,14 +209,21 @@ MS_shortestPathsNetwork = function(network_table, organism_code, source_nodes,
     if(length(non_mapped_all) > 0) {
       report_message = paste("Note that some source_nodes or some target_nodes",
                              "were not mapped onto the network")
-      message(report_message)
-      message()
+      #message(report_message)
+      #message()
+    } else {
+        report_message = paste("Note that all source_nodes and target_nodes",
+                               "were successfully mapped onto the network")
     }
 
     if (names == FALSE) {
+        message(report_message)
+        message()
         return(all_pathsGM)
     }
 
     all_pathsGM_names = network_names(all_pathsGM, organism_code)
+    message(report_message)
+    message()
     return(all_pathsGM_names)
 }

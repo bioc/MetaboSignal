@@ -4,8 +4,8 @@
 \description{
 This function allows filtering a network based on tissue expression data from the
 Human Protein Atlas, by removing signaling genes that are not detected in the
-target tissue(s) (reliability = "approved" or "supported"). This function can be only used
-to filter human networks.
+target tissue(s) (reliability = "approved" or "supported"). This function can be
+only used to filter human networks.
 }
 \usage{
 MS_tissueFilter(network_table, tissue, input_format = "kegg", expand_genes = FALSE)
@@ -13,7 +13,7 @@ MS_tissueFilter(network_table, tissue, input_format = "kegg", expand_genes = FAL
 \arguments{
   \item{network_table}{three-column matrix where each row represents an edge
   between two nodes. The gene nodes of this network must be human specific gene
-  IDS (not orthologies). For this use the function "MS_keggNetwork( )" with
+  IDS (not orthologies). For this, use the function "MS_keggNetwork( )" with
   expand_genes = TRUE.}
   \item{tissue}{character vector indicating the tissue(s) of interest. Signaling
   genes (i.e. non-enzymatic genes) not detected in the target tissue(s)

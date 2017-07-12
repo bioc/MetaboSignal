@@ -118,15 +118,15 @@ test.MS_shortestPathsNetwork()
 ################################################################################
 ################################################################################
 
-#### Test MS_filterNetwork####
+#### Test MS_topologyFilter ####
 
-test.MS_filterNetwork <- function() {
-  # MS_FilerNetwork returns a matrix
-  checkTrue(is.matrix(MS_filterNetwork(MetaboSignal_table, type = "all",
+test.MS_topologyFilter <- function() {
+  # MS_topologyFilter returns a matrix
+  checkTrue(is.matrix(MS_topologyFilter(MetaboSignal_table, type = "all",
                                        target_node = "cpd:C00267", distance_th = 4,
                                        bw_th = 0.00005)))
 }
-test.MS_filterNetwork()
+test.MS_topologyFilter()
 
 
 ################################################################################
