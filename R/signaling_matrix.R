@@ -124,6 +124,7 @@ MS_interactionType = function(signaling_paths, all_paths) {
     interactionM_collapsed = do.call(rbind, lapply(IM_lines, collapse_interactions,
                                                    interactionM))
     interactionM_collapsed = as.matrix(unique(interactionM_collapsed), ncol = 3)
+    interactionM_collapsed = gsub("compound", "indirect-compound", interactionM_collapsed)
     colnames(interactionM_collapsed) = c("source", "target", "interaction_type")
     rownames(interactionM_collapsed) = NULL
 
