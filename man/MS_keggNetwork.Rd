@@ -3,11 +3,15 @@
 \title{Build MetaboSignal network-table}
 \description{
 This function generates a directed network-table (i.e. three-column matrix), where
-each row represents an edge connecting two nodes (from source to target). The third
-column indicates the type of interaction. Nodes represent different molecular
-entities: metabolic-genes (i.e. genes encoding enzymes that catalyze metabolic
-reactions), signaling-genes (e.g. kinases), reactions and compounds (metabolites,
-drugs or glycans).
+each row represents an edge connecting two nodes (from source to target). Nodes
+represent different molecular entities: metabolic-genes (i.e. genes encoding
+enzymes that catalyze metabolic reactions), signaling-genes (e.g. kinases),
+reactions and compounds (metabolites, drugs or glycans). The third column of the
+matrix indicates the interaction type. Compound-gene (or gene-compound) interactions
+are designated as: "k_compound:reversible" or "kegg_compound:irreversible",
+depending on the direction of the interaction. Other types of interactions
+correspond to gene-gene interactions. When KEGG reports various types of interaction
+for the same gene pair, the "interaction_type" is collapsed using "/".
 
 The network-table generated with this function can be customized based on several
 criteria. For instance, undesired nodes can be removed or replaced using the
