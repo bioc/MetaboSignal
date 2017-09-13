@@ -23,7 +23,7 @@ MS_tissueFilter(network_table, tissue, input_format = "kegg", expand_genes = FAL
   network_table ("entrez" or "kegg").}
   \item{expand_genes}{logical scalar indicating whether the gene nodes in the
   filtered network will represent orthology IDs (expand_genes = FALSE) or
-  organim-specific gene IDs (expand_genes = TRUE).}
+  organism-specific gene IDs (expand_genes = TRUE).}
 }
 \value{
 A three-column matrix where each row represents an edge between two nodes.

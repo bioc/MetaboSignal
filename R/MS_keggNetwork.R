@@ -83,6 +83,7 @@ get_signaling_type = function(st, interaction_type) {
     ind = which(collapsed_edges == st)
 
     if(length(ind) == 0) {
+        #print(st)
         type = "unknown"
     } else {
         type = gsub(";", "/", interaction_type[ind, 3])

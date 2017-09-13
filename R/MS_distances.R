@@ -106,7 +106,7 @@ MS_distances = function(network_table, organism_code, mode = "SP",
         unmapped_targets = setdiff(target_metabolites, metabolites)
     }
 
-    submatrixGM = distanceGM_final[mapped_sources, mapped_targets]
+    submatrixGM = distanceGM_final[as.character(mapped_sources), mapped_targets]
     submatrixGM = matrix(submatrixGM, ncol = length(mapped_targets),
                          nrow = length(mapped_sources))
     rownames(submatrixGM) = mapped_sources

@@ -3,7 +3,7 @@
 \title{Export network in cytoscape format}
 \description{
 This function generates a network file and two attribute files ("NodesType.txt",
-"TargetNodes.txt"), which can be imported into cytoscape to visualize the network.
+"TargetNodes.txt"), which can be imported into Cytoscape to visualize the network.
 The first attribute file allows customizing the nodes of the network based on
 the molecular entity they represent: compound, reaction, metabolic-gene or
 signaling-gene. The second attribute file allows highlighting a set of nodes of
@@ -37,7 +37,7 @@ MS_exportCytoscape(network_table, organism_code, names = TRUE,
 A data frame where each row represents an edge between two nodes (from source to
 target). The function also generates and exports a network file ("MS_Network.txt")
 and two attribute files ("MS_NodesType.txt", "MS_TargetNodes.txt"), which can be
-imported into cytoscape to visualize the network.
+imported into Cytoscape to visualize the network.
 }
 \references{
 Shannon P et al. (2003). Cytoscape: a software environment for integrated models of

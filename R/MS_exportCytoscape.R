@@ -5,17 +5,45 @@ cyto_directionality = function(edge) {
     return(new_edge)
 }
 
-############### get_source #############
+############### get_source ############# Updated
 get_source = function(edge) {
-    if (grepl("k_", edge)) {
-        return("kegg")
-    } else {
+    ans_k = grepl("k_", edge)
+    ans_o = grepl("o_", edge)
+    ans_t = grepl("t_", edge)
+    #ans_m = grepl("m_", edge)
+    
+   # if (ans_m) { #microRNA
+        #return("mirtarbase")
+    #}
+    if (ans_k + ans_o + ans_t == 3) {
+        return("kegg; omnipath;trrust")
+    }
+    if (ans_k + ans_o + ans_t == 0) {
         return("other")
+    }
+    if (ans_k == TRUE & ans_o == TRUE & ans_t == FALSE) {
+        return("kegg;omnipath")
+    }
+    if (ans_k == TRUE & ans_o == FALSE & ans_t == TRUE) {
+        return("kegg;trrust")
+    }
+    if (ans_k == FALSE & ans_o == TRUE & ans_t == TRUE) {
+        return("omnipath;trrust")
+    }
+    if (ans_k == TRUE & ans_o == FALSE & ans_t == FALSE) {
+        return("kegg")
+    }
+    if (ans_k == FALSE & ans_o == TRUE & ans_t == FALSE) {
+        return("omnipath")
+    }
+    if (ans_k == FALSE & ans_o == FALSE & ans_t == TRUE) {
+        return("trrust")
     }
 }
 
-#################### get_molecule_type #######################
+#################### get_molecule_type ####################### Updated
 get_molecule_type = function(node, organism_code) {
+    nodeBU = node # new
     if( organism_code == "hsa" & !is.na(suppressWarnings(as.numeric(node)))) { # if it is entrez
         node = paste("hsa:", node, sep = "")
         #node = conv_entrez_kegg(node, source = "entrez", organism_code = "hsa")
@@ -24,8 +52,7 @@ get_molecule_type = function(node, organism_code) {
         node_type = "compound"
     } else if (grepl("rn", node) == TRUE) {
         node_type = "reaction"
-    } else if (grepl(organism_code, node) == TRUE | grepl("K",
-        node) == TRUE) {
+    } else if (grepl(organism_code, node) == TRUE | grepl("K", node) == TRUE) {
         file = paste("http://rest.kegg.jp/get/", node, sep = "")
         lines = try(readLines(file), silent = TRUE)
         if (grepl("Error", lines[1]) == FALSE) {
@@ -34,10 +61,19 @@ get_molecule_type = function(node, organism_code) {
             if (length(enzyme_lines) >= 1 & length(metabo_lines) > 0) {
                 node_type = "metabolic-gene"
             } else (node_type = "signaling-gene")
-        } else (node_type = "other")
+        } else {
+            if (nodeBU %in% regulatory_interactions[, c(1, 3)]) {
+                node_type = "signaling-gene"
+            } else {
+                node_type = "other"
+            }
+        }
+    } else if (grepl("hsa-miR", node)) {
+        node_type = "microRNA"
     } else {
         node_type = "other"
     }
+    
     return(node_type)
 }
 
@@ -60,8 +96,8 @@ MS_exportCytoscape = function(network_table, organism_code, names = TRUE,
     rev_ind = grep("compound:reversible", network[, 3])
 
     if (length(rev_ind) > 0) {
-        rev_edges = paste(network[rev_ind, 1], network[rev_ind,
-            2], network[rev_ind, 3], sep = ">")
+        rev_edges = paste(network[rev_ind, 1], network[rev_ind, 2], 
+                          network[rev_ind, 3], sep = ">")
         new_edges = do.call(rbind, lapply(rev_edges, cyto_directionality))
         network = rbind(network[-rev_ind, ], unique(new_edges))
         rownames(network) = NULL
@@ -74,34 +110,17 @@ MS_exportCytoscape = function(network_table, organism_code, names = TRUE,
     }
 
     ## Get source
-    all_net_edges = paste(cytoscape_net[, 1], cytoscape_net[,
-        2], cytoscape_net[, 3], sep = "_")
+    all_net_edges = paste(cytoscape_net[, 1], cytoscape_net[, 2],
+                          cytoscape_net[, 3], sep = "_")
     sources = as.character(sapply(all_net_edges, get_source))
     cytoscape_netDF = unique(as.data.frame(cbind(cytoscape_net, database = sources),
-        rownames = NULL)) # Make it unique in case there are duplicated common names
+        rownames = NULL)) # Make it unique in case of duplicated common names
 
     file_nameN = paste(file_name, "Network.txt", sep = "_")
     write.table(cytoscape_netDF, file_nameN, row.names = FALSE,
         sep = "\t", quote = FALSE, col.names = TRUE)
 
-    ## Get node type all_nodes = unique(as.vector(network[, 1:2]))
-    ## cpd_edge_ind = unique(c(grep('cpd:|dr:|gl:', network[, 1]),
-    ## grep('cpd:|dr:|gl:', network[, 2]))) if
-    ## (length(cpd_edge_ind) > 0) { all_genes =
-    ## all_nodes[-grep('cpd:|dr:|gl:', all_nodes)] cpd_edges_nodes
-    ## = unique(as.vector(network[cpd_edge_ind, 1:2])) cpd_nodes =
-    ## unique(cpd_edges_nodes[grep('cpd:|dr:|gl:',
-    ## cpd_edges_nodes)]) mg_nodes =
-    ## unique(cpd_edges_nodes[-grep('cpd:|dr:|gl:',
-    ## cpd_edges_nodes)]) # metabolic genes rg_nodes =
-    ## setdiff(all_genes, mg_nodes) # regulatory genes ## Node
-    ## types matrix cpd_nodesM = cbind(cpd_nodes, 'compound')
-    ## mg_nodesM = cbind(mg_nodes,
-    ## 'enzyme/reaction/compound-target') node_type =
-    ## rbind(cpd_nodesM, mg_nodesM) if (length(rg_nodes) > 0) {
-    ## rg_nodesM = cbind(rg_nodes, 'regulatory-protein') node_type
-    ## = rbind(node_type, rg_nodesM) } } else { node_type =
-    ## cbind(all_nodes, 'regulatory-protein') }
+    ## Get node type
     all_nodes = unique(as.vector(network[, 1:2]))
     types = sapply(all_nodes, get_molecule_type, organism_code = organism_code)
     node_type = cbind(all_nodes, types)
@@ -110,7 +129,7 @@ MS_exportCytoscape = function(network_table, organism_code, names = TRUE,
 
     if (names == TRUE) { # This has been updated
         on_nodes = unique(cbind(as.vector(network[, 1:2]),
-                              as.vector(cytoscape_net[, 1:2])))
+                                as.vector(cytoscape_net[, 1:2])))
         # in case the several KEGG IDs are associated to the same symbol
         for (i in 1:nrow(node_type)) {
             ind = which(on_nodes[, 1] == node_type[i, 1])[1]
@@ -127,7 +146,7 @@ MS_exportCytoscape = function(network_table, organism_code, names = TRUE,
         sep = "\t", quote = FALSE, col.names = TRUE)
 
     ## Write targets
-    if (!is.null(targets)) {
+    if (!is.null(targets)) { # This has been updated
         if (names == TRUE) {
             for (i in 1:length(targets)) {
                 ind = which(on_nodes[, 1] == targets[i])[1]

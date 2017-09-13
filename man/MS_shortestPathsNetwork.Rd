@@ -5,7 +5,7 @@
 This function allows calculating the shortest paths from a set of source nodes to
 a set of target nodes, and representing them as a network. By default, the function
 exports a network file and two attribute files ("NodesType.txt", "TargetNodes.txt"),
-which can be imported into cytoscape to visualize the network. The first attribute
+which can be imported into Cytoscape to visualize the network. The first attribute
 file allows customizing the nodes of the network based on the molecular entity
 they represent: signaling-gene, metabolic-gene, reaction or compound. The second
 attribute file allows highlighting the source and target nodes.
@@ -58,7 +58,7 @@ MS_shortestPathsNetwork(network_table, organism_code, source_nodes, target_nodes
   remain unchanged.
   }
   \item{export_cytoscape}{logical scalar indicating whether network and attribute
-  cytoscape files will be generated and exported.}
+  Cytoscape files will be generated and exported.}
   \item{file_name}{character vector that allows customizing the name of the
   exported files.}
 }
@@ -66,7 +66,7 @@ MS_shortestPathsNetwork(network_table, organism_code, source_nodes, target_nodes
 A matrix where each row represents an edge between two nodes. By
 default, the function also generates a network file ("MS_Network.txt") and
 two attribute files ("MS_NodesType.txt", "MS_TargetNodes.txt"), which can be
-imported into cytoscape to visualize the network.
+imported into Cytoscape to visualize the network.
 }
 \note{
 The network-table generated with this function can be also visualized in R using
