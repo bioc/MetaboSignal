@@ -1,4 +1,4 @@
-CHANGES IN VERSION 2.1.0
+CHANGES IN VERSION 1.7.12
 -----------------------
   o MetaboSignal integrates KEGG metabolic and signaling networks with regulatory interactions reported in OmniPath and TRRUST.
   o New functions: “MS2_ppiNetwork( )” and “MS2_mergeNetworks( )”.
