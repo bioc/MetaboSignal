@@ -15,7 +15,7 @@ MS_getPathIds(organism_code)
   "MS_keggFinder( )".}
 }
 \value{
-This function returns a matrix, where each row contains the id, description, category,
+This function returns a matrix, where each row contains the ID, description, category,
 and type (i.e. "metabolic" or "signaling") of each pathway. This matrix is also
 exported in a file named "organism-code_pathways.txt".
 }

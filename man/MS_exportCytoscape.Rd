@@ -22,7 +22,7 @@ MS_exportCytoscape(network_table, organism_code, names = TRUE,
   of interest. For example the KEGG code for the rat is "rno". See function
   "MS_keggFinder( )".
   }
-  \item{names}{logical scalar indicating whether the metabolite or gene IDs
+  \item{names}{logical scalar indicating whether metabolite or gene KEGG IDs
   will be transformed into common metabolite names or gene symbols. Reaction IDs
   remain unchanged.
   }
@@ -43,8 +43,7 @@ imported into Cytoscape to visualize the network.
 Shannon P et al. (2003). Cytoscape: a software environment for integrated models of
 biomolecular interaction networks. Genome Research, 13, 2498-2504.
 }
-\examples{
-\donttest{
+\examples{\donttest{
 data(MetaboSignal_table)
 MS_exportCytoscape(MetaboSignal_table, organism_code = "rno", names = FALSE)
 }

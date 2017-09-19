@@ -35,8 +35,8 @@ MS_distances(network_table, organism_code, mode = "SP", source_genes = "all",
   can be obtained using the function "MS_keggFinder( )". By default,
   target_metabolites = "all", indicating that all the metabolites of the network
   will be used.}
-  \item{names}{logical scalar indicating whether the metabolite IDs or gene KEGG
-  IDs will be transformed into common metabolite names or gene symbols. Reaction
+  \item{names}{logical scalar indicating whether metabolite or gene KEGG IDs will be
+  transformed into common metabolite names or gene symbols. Reaction
   IDs remain unchanged.}
  }
 \value{

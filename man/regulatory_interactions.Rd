@@ -4,7 +4,7 @@
 \title{Regulatory interactions from OmniPath and TRRUST}
 \format{Matrix}
 \description{
-  This matrix contains a set of human regulatory interactions compiled from three
+  This matrix contains a set of human regulatory interactions compiled from two
   literature-curated resources: OmniPath (directed protein-protein and signaling
   interactions reported in databases with an appropiate licence) and TRRUST
   (transcription factor-target interactions). For each interaction, both literature

@@ -38,7 +38,7 @@ MS_keggNetwork(metabo_paths, signaling_paths, expand_genes = FALSE,
   represent orthology IDs (FALSE) or organism-specific gene IDs (TRUE).
   }
   \item{convert_entrez}{logical scalar indicating whether the KEGG gene IDs will
-  be transformed into entrez IDs. This argument will be ignored if expand_genes =
+  be transformed into Entrez IDs. This argument will be ignored if expand_genes =
   FALSE, or if the input paths are not human-specific.}
 }
 \value{

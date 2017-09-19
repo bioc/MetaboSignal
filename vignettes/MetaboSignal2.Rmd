@@ -63,7 +63,7 @@ datasets, containing the following information:<br><br>
   required. Notice that there are some inconsistencies between databases in terms 
   of direction and sign of the interactions. This is likely to be due to curation errors, 
   or also to the fact that some interactions might be bidirectional or have different 
-  sign depending on the tissue. The user can update/edit this matrix as required. <br><br>
+  sign depending on the tissue. Users can update/edit this matrix as required. <br><br>
   - kegg_pathways: matrix containing the identifiers (IDs) of relevant metabolic (n = 85) 
   and signaling (n = 126) human KEGG pathways. These IDs were retrieved using the function
   "MS_getPathIds( )". </p>
@@ -88,7 +88,7 @@ tail(kegg_pathways[, -2])
 the IDs of all human metabolic and signaling KEGG pathways. <p>
 ```{r, tidy = TRUE, eval=FALSE}
 ## Get IDs of metabolic and signaling human pathways
-hsa_paths  <-MS_getPathIds(organism_code = "hsa")
+hsa_paths <- MS_getPathIds(organism_code = "hsa")
 ```
 <p style="font-size:110%"> This function generates a ".txt" file in the working
 directory named "hsa_pathways.txt". We recommend that users take some time to inspect 
@@ -101,13 +101,13 @@ the "kegg_pathways" dataset.
 MetaboSignal network, by merging the selected metabolic and signaling KEGG pathways 
 stored in the "kegg_pathways" dataset: </p>
 
-```{r, tidy = TRUE}
+```{r, tidy = TRUE, tidy.opts=list(indent = 4, width.cutoff = 50)}
 ## Create metabo_paths and signaling_paths vectors
 metabo_paths <- kegg_pathways[kegg_pathways[, "Path_type"] == "metabolic", "Path_id"]
 
 signaling_paths <- kegg_pathways[kegg_pathways[, "Path_type"] == "signaling", "Path_id"]
 ```
-```{r tidy = TRUE, tidy.opts=list(indent = 4, width.cutoff = 70), results='asis', eval=FALSE}
+```{r tidy = TRUE, tidy.opts=list(indent = 4, width.cutoff = 50), results='asis', eval=FALSE}
 ## Build KEGG network (might take a while)
 keggNet_example <- MS_keggNetwork(metabo_paths, signaling_paths, expand_genes = TRUE, 
                                   convert_entrez = TRUE)
@@ -115,8 +115,6 @@ keggNet_example <- MS_keggNetwork(metabo_paths, signaling_paths, expand_genes = 
 ```{r, tidy = TRUE}
 ## See network format
 head(keggNet_example)
-
-## unique(keggNet_example[, "interaction_type"])
 ```
 
 <p style="font-size:110%"> The network is formatted as a three-column matrix where 
@@ -138,7 +136,7 @@ these indirect interactions, as they might alter further topological analyses. I
 this example, we remove interactions classified as: "unknown", "indirect-compound", 
 "indirect-effect", "dissociation", "state-change", "binding", "association".</p>
 
-```{r, tidy = TRUE}
+```{r, tidy = TRUE, tidy.opts=list(indent = 4, width.cutoff = 55)}
 ## Get all types of interaction
 all_types <- unique(unlist(strsplit(keggNet_example[, "interaction_type"], "/")))
 all_types <- gsub("k_", "", all_types)
@@ -152,8 +150,6 @@ print(wanted_types) # interactions that will be retained
 ## Filter keggNet_example to retain only wanted interactions
 wanted_types <- paste(wanted_types, collapse = "|")
 keggNet_clean <- keggNet_example[grep(wanted_types, keggNet_example[, 3]), ]
-
-## unique(keggNet_example_clean[, "interaction_type"])
 ```
 <br>
 
@@ -188,7 +184,7 @@ are collapsed, and the interaction type is reported as: "o_; t_;". </p>
 <p style="font-size:110%"> Finally, we use the function "MS2_mergeNetworks( )" to merge
 the KEGG-based network with the regulatory network. </p>
 
-```{r tidy = TRUE, tidy.opts=list(indent = 4, width.cutoff = 70), results='asis', eval=FALSE}
+```{r tidy = TRUE, tidy.opts=list(indent = 4, width.cutoff = 60), results='asis', eval=FALSE}
 ## Merge networks
 mergedNet_example <- MS2_mergeNetworks(keggNet_clean, ppiNet_example)
 ```

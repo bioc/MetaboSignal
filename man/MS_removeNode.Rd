@@ -2,7 +2,7 @@
 \alias{MS_removeNode}
 \title{Remove undesired nodes from the network}
 \description{
-This function allows removing undesired nodes of the network-table.
+This function allows removing undesired nodes from the network-table.
 }
 \usage{
 MS_removeNode(nodes, network_table)

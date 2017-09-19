@@ -53,7 +53,7 @@ MS_shortestPathsNetwork(network_table, organism_code, source_nodes, target_nodes
   \item{distance_th}{establishes a shortest path length threshold. Only shortest
   paths with length below this threshold will be included in the network.
   }
-  \item{names}{logical scalar indicating whether the metabolite or gene KEGG IDs
+  \item{names}{logical scalar indicating whether metabolite or gene KEGG IDs
   will be transformed into common metabolite names or gene symbols. Reaction IDs
   remain unchanged.
   }
@@ -80,8 +80,7 @@ research. InterJournal, Complex Systems, 1695.
 Shannon, P., et al. (2003). Cytoscape: a software environment for integrated
 models of biomolecular interaction networks. Genome Research, 13, 2498-2504.
 }
-\examples{
-\donttest{
+\examples{\donttest{
 data(MetaboSignal_table)
 
 # Shortest paths from G6PC ("K01084") to pyruvate ("cpd:C00022") and

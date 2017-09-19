@@ -30,16 +30,16 @@ Rafael Ayala, Joram M. Posma, Ana L. Neves, Marc-Emmanuel Dumas </p>
 
 <p style="font-size:110%">The Kyoto Encyclopedia of Genes and Genomes (KEGG) [@kanehisa2000] is the reference database to explore biochemical pathways and cellular processes. KEGG pathways are stored and displayed as graphical diagrams composed by nodes (e.g. metabolites, genes, reactions) and edges, which represent the physical interaction (e.g. metabolic reaction, activaction, or binding) between pairs of nodes. </p>
 
-<p style="font-size:110%">In the last years, various tools have been developed for analyzing and customizing metabolic or signaling KEGG graphs independently [@zhang2009kegggraph; @posma2014]. However, these approaches ignore the interconnection between the genome and the metabolome, and consequently they cannot provide an integrated overview of regulatory events leading to the observed metabolic patterns. In order to address this problem, we have developed an R-based toolbox, called MetaboSignal, that allows building organism-specific KEGG metabolic and signaling networks that account for the interaction between metabolites and genes (both metabolic and signaling). Importantly, our approach allows creating tissue-specific networks, where genes undetected in a given target tissue are neglected. 
+<p style="font-size:110%">In the last years, various tools have been developed for analyzing and customizing metabolic or signaling KEGG graphs independently [@zhang2009; @posma2014]. However, these approaches ignore the interconnection between the genome and the metabolome, and consequently they cannot provide an integrated overview of regulatory events leading to the observed metabolic patterns. In order to address this problem, we have developed an R-based toolbox, called MetaboSignal, that allows building organism-specific KEGG metabolic and signaling networks that account for the interaction between metabolites and genes (both metabolic and signaling). Importantly, our approach allows creating tissue-specific networks, where genes undetected in a given target tissue are neglected. 
 <br><br>  </p>
 
 # Software features
 
-<p style="font-size:110%">The metabolic and signaling KEGG pathways of interest are parsed using the KEGGgraph package [@zhang2009kegggraph], to generate organism-specific metabolic and signaling directed network-tables (i.e. 3-column matrix). The user can decide whether gene nodes will represent organism-specific KEGG gene IDs or orthology IDs. Importantly, in the case of human, MetaboSignal allows building tissue-specific signaling networks, where genes not expressed in a given target tissue are neglected. Tissue filtering is achieved using the hpar package [@gattohpar], which is based on data from the Human Protein Atlas database.</p>
+<p style="font-size:110%">The metabolic and signaling KEGG pathways of interest are parsed using the KEGGgraph package [@zhang2009], to generate organism-specific metabolic and signaling directed network-tables (i.e. 3-column matrix). The user can decide whether gene nodes will represent organism-specific KEGG gene IDs or orthology IDs. Importantly, in the case of human, MetaboSignal allows building tissue-specific signaling networks, where genes not expressed in a given target tissue are neglected. Tissue filtering is achieved using the hpar package [@gattohpar], which is based on data from the Human Protein Atlas database.</p>
 
 <p style="font-size:110%">The metabolic and signaling networks are then merged to build a MetaboSignal network, which can be further customized according to different criteria. For instance, undesired nodes can be removed or nodes representing chemical isomers of the same compound can be clustered into a common node. MetaboSignal evaluates network topology (e.g. node betweeness) and calculates a distance matrix [@csardi2006igraph] containing the shortest path lengths from a list of genes to a list of metabolites of interest. MetaboSignal also builds subnetworks containing betweenness-ranked shortest paths from a list of genes to a list of metabolites (presumably selected based on the distance matrix).</p>
 
-<p style="font-size:110%">Finally, the original network or the sub-networks are exported to be visualized in CytoScape [@shanon2003]. MetaboSignal also generates several attribute files that allow customization of the node parameters. Alternatively, the network can be transformed into an igraph object and visualized in R. 
+<p style="font-size:110%">Finally, the original network or the sub-networks are exported to be visualized in CytoScape [@shannon2003]. MetaboSignal also generates several attribute files that allow customization of the node parameters. Alternatively, the network can be transformed into an igraph object and visualized in R. 
 <br><br> </p>
 
 # Example
@@ -63,7 +63,7 @@ library(MetaboSignal)
 MS_keggFinder(KEGG_database="organism", match = "rattus")
 ```
 
-```{r tidy = TRUE}
+```{r tidy = TRUE, tidy.opts=list(indent = 4, width.cutoff = 50)}
 MS_keggFinder(KEGG_database ="pathway", match = c("glycol", "inositol phosphate","insulin signal", "akt"), organism_code = "rno")
 ```
 
@@ -79,7 +79,7 @@ signaling_paths <- c("rno04910", "rno04151")
 
 <p style="font-size:110%">We used the selected metabo_paths and signaling_paths to build a MetaboSignal network-table. </p>
 
-```{r tidy = TRUE, tidy.opts=list(indent = 4, width.cutoff = 70), results='asis',eval=FALSE}
+```{r tidy = TRUE, tidy.opts=list(indent = 4, width.cutoff = 50), results='asis',eval=FALSE}
 MetaboSignal_table <- MS_keggNetwork(metabo_paths = metabo_paths, 
                                      signaling_paths = signaling_paths)
 
@@ -92,14 +92,14 @@ MetaboSignal_table <- MS_keggNetwork(metabo_paths = metabo_paths,
 
 <p style="font-size:110%">Given that we were not interest in discriminating between different isomers of D-glucose, we used the function "MS_replaceNodes( )" to group the IDs of alpha-D-glucose ("cpd:C00267"), beta-D-glucose ("cpd:C00221") and D-glucose ("cpd:C00031").</p>
 
-```{r tidy = TRUE}
+```{r tidy = TRUE, tidy.opts=list(indent = 4, width.cutoff = 50)}
 MetaboSignal_table <- MS_replaceNode(node1 = c("cpd:C00267", "cpd:C00221"), 
                                      node2 = "cpd:C00031", MetaboSignal_table)
 ```
 
 <p style="font-size:110%">We used the function "MS_findMappedNodes( )" to check that the glucose isomers had been successfully clustered.</p>
 
-```{r tidy = TRUE, message = FALSE}
+```{r tidy = TRUE, tidy.opts=list(indent = 4, width.cutoff = 50), message = FALSE}
 MS_findMappedNodes(nodes = c("cpd:C00267", "cpd:C00221", "cpd:C00031"),
                    MetaboSignal_table)
 ```
@@ -110,7 +110,7 @@ MS_findMappedNodes(nodes = c("cpd:C00267", "cpd:C00221", "cpd:C00031"),
 <p style="font-size:110%">We used the function "MetaboSignal_distances( )" to calculate the shortest path lengths from our genes of interest: *G6pc3* (303565), *Ship2* (65038) or *Ppp2r5b* (309179) to D-glucose ("cpd:C00031"). We used the default mode (mode = "SP"), which indicates that all the network is considered as directed, except the edges linked to the target metabolite (in this case D-glucose) that are considered as undirected. This option is designed to reach metabolites acting as substrates of irreversible reactions, while keeping the directionality of the network.</p>
 
 
-```{r tidy = TRUE, message = FALSE}
+```{r tidy = TRUE, tidy.opts=list(indent = 4, width.cutoff = 50), message = FALSE}
 ## Get KEGG IDs
 MS_convertGene(genes = c("303565", "65038", "309179"), organism_code = "rno", organism_name = "rat", output = "matrix")
 MS_distances(MetaboSignal_table, organism_code = "rno", 
@@ -123,7 +123,7 @@ MS_distances(MetaboSignal_table, organism_code = "rno",
 
 <p style="font-size:110%">Finally, we used the function "MetaboSignal_shortestPathsNetwork( )" to build a subnetwork containing betweenness-ranked shortest paths from our genes of interest: *G6pc3* (303565), *Ship2* (65038) or *Ppp2r5b* (309179) to D-glucose ("cpd:C00031").</p>
 
-```{r tidy = TRUE, tidy.opts=list(indent = 4, width.cutoff = 70), eval = FALSE }
+```{r tidy = TRUE, tidy.opts=list(indent = 4, width.cutoff = 50), eval = FALSE }
 MS_shortestPathsNetwork(MetaboSignal_table, organism_code="rno",
                         source_nodes = c("K01084", "K15909", "K11584"), 
                         target_nodes = "cpd:C00031", type = "bw", 
