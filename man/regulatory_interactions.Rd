@@ -4,13 +4,13 @@
 \title{Regulatory interactions from OmniPath and TRRUST}
 \format{Matrix}
 \description{
-  This matrix contains a set of human regulatory interactions compiled from three 
-  literature-curated resources: OmniPath (directed protein-protein and signaling 
-  interactions reported in databases with an appropiate licence) and TRRUST 
-  (transcription factor-target interactions). For each interaction, both literature 
-  references and primary database references are reported. The users are responsible 
-  for respecting the terms of their licences and for citing them when required. 
-  This matrix can be edited or updated by the user if required.
+  This matrix contains a set of human regulatory interactions compiled from three
+  literature-curated resources: OmniPath (directed protein-protein and signaling
+  interactions reported in databases with an appropiate licence) and TRRUST
+  (transcription factor-target interactions). For each interaction, both literature
+  references and primary database references are reported. The users are responsible
+  for respecting the terms of their licences and for citing them when required.
+  This matrix can be edited or updated by the users if required.
 }
 \references{
 Ceol, A., et al. (2007). DOMINO: a database of domain-peptide interactions. Nucleic

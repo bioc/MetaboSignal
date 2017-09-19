@@ -4,9 +4,9 @@
 \description{
 This function generates a directed regulatory network by merging interactions
 reported in two literature-curated resources: OmniPath and TRRUST. The network
-çis formalized as a three-column matrix, where each row represents an edge
+is formalized as a three-column matrix, where each row represents an edge
 connecting two nodes (from source to target). The third column indicates
-interaction type and the source of the interaction (OmniPath = "o_",
+the type of interaction, as well as the source of the interaction (OmniPath = "o_",
 TRRUST = "t_").  Nodes represent gene Entrez IDs.
 }
 \usage{
@@ -24,9 +24,8 @@ A three-column matrix where each row represents an edge between two nodes.
 \note{
 The dataset "regulatory_interactions" contains details regarding primary database
 reference(s) as well as literature reference(s) of each of the regulatory interactions.
-The user is fully responsible to respect the terms of the licences of the corresponding
-databases and to cite them when required. The user can edit/update this dataset if
-needed.
+The users are fully responsible for respecting the terms of the these databases and for
+citing them when required. The users can edit/update this dataset if needed.
 }
 \references{
 Ceol, A., et al. (2007). DOMINO: a database of domain-peptide interactions. Nucleic
@@ -97,6 +96,6 @@ omnipath_net <- MS2_ppiNetwork(datasets = "omnipath")
 # Build regulatory network using the TRRUST dataset only
 trrust_net <- MS2_ppiNetwork(datasets = "trrust")
 
-# Build regulatory network using interactions from STRING and BIOGRID
+# Build regulatory network using interactions from STRING and BioGRID
 biogridstring_net <- MS2_ppiNetwork(datasets = c("biogrid", "string"))
 }
