@@ -1,16 +1,16 @@
 CHANGES IN VERSION 1.7.12
 -----------------------
   o MetaboSignal integrates KEGG metabolic and signaling networks with regulatory interactions reported in OmniPath and TRRUST.
-  o New functions: “MS2_ppiNetwork( )” and “MS2_mergeNetworks( )”.
+  o New functions: "MS2_ppiNetwork( )" and "MS2_mergeNetworks( )".
 
 
 CHANGES IN VERSION 1.7.8
 -----------------------
-  o MetaboSignal includes a new function: “MS_getPathIds()" which allows retrieving the identifiers (IDs)
+  o MetaboSignal includes a new function: "MS_getPathIds()" which allows retrieving the identifiers (IDs)
   of all metabolic and signaling KEGG pathways of a given organism. 
   o "MS_keggNetwork()" can now transform KEGG IDs into Entrez gene IDs (use expand_genes = TRUE, 
   convert_entrez = TRUE).
-  o "MS_filterNetwork()" has been renamed as “MS_topologyFilter”. 
+  o "MS_filterNetwork()" has been renamed as "MS_topologyFilter". 
 
 CHANGES IN VERSION 1.7.2
 -----------------------
