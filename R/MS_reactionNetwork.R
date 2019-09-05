@@ -32,11 +32,14 @@ MS_reactionNetwork <- function(metabo_paths) {
         }
     }
     ## Add directionality
-    rownames(metabolic_table) <- paste(metabolic_table[, 1], metabolic_table[, 2], sep = "_")
-    check_rev <- c(rownames(metabolic_table), paste(metabolic_table[, 2], metabolic_table[, 1], sep = "_"))
-    id_dup <- which(duplicated(check_rev))
+    if(metabo_paths == "rn01100") {
+      metabolic_table_final <- cbind(metabolic_table, type = "k_compound:reversible")
+    } else {
+      rownames(metabolic_table) <- paste(metabolic_table[, 1], metabolic_table[, 2], sep = "_")
+      check_rev <- c(rownames(metabolic_table), paste(metabolic_table[, 2], metabolic_table[, 1], sep = "_"))
+      id_dup <- which(duplicated(check_rev))
 
-    if (length(id_dup) > 0) { ## there are reversible reactions
+      if (length(id_dup) > 0) { ## there are reversible reactions
         dup_names <- paste(check_rev[id_dup], collapse = "|")
         irrev_rn <- cbind(metabolic_table[-grep(dup_names, rownames(metabolic_table)), ],
                           type = "k_compound:irreversible")
@@ -44,8 +47,9 @@ MS_reactionNetwork <- function(metabo_paths) {
         rev_rn <- cbind(unique(do.call(rbind, sort_dup)), type = "k_compound:reversible")
 
         metabolic_table_final <- rbind(irrev_rn, rev_rn)
-    } else {
+      } else {
         metabolic_table_final <- cbind(metabolic_table, type = "k_compound:irreversible")
+      }
     }
     colnames(metabolic_table_final) <- c("source", "target", "type")
     rownames(metabolic_table_final) <- NULL

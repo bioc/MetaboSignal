@@ -1,3 +1,8 @@
+CHANGES IN VERSION 1.14.1
+-----------------------
+  o MS_keggNetwork returns interaction subtype (e.g. activation) instead of type (e.g. PPrel). Thank you Shilpa Harshan for noticing this!
+
+
 CHANGES IN VERSION 1.7.12
 -----------------------
   o MetaboSignal integrates KEGG metabolic and signaling networks with regulatory interactions reported in OmniPath and TRRUST.
