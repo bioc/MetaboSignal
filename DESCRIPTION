@@ -7,7 +7,7 @@ Date: 2017-05-25
 Author: Andrea Rodriguez-Martinez, Rafael Ayala, Joram M. Posma, Ana L. Neves, Maryam Anwar, Jeremy K. Nicholson, Marc-Emmanuel Dumas
 Maintainer: Andrea Rodriguez-Martinez
         <andrea.rodriguez-martinez13@imperial.ac.uk>, Rafael Ayala
-        <r.ayala14@imperial.ac.uk>
+        <rafael.ayala@oist.jp>
 Description: MetaboSignal is an R package that allows merging,
         analyzing and customizing metabolic and signaling KEGG
         pathways. It is a network-based approach designed to explore
