@@ -5,7 +5,7 @@ MS_changeNames = function(nodes, organism_code) {
     ## Check if there are compound nodes##
     if (length(grep("cpd:", nodes) > 0)) {
         # Get compounds table
-        file = "http://rest.kegg.jp/list/compound"
+        file = "https://rest.kegg.jp/list/compound"
         response = getURL(file)
         metaboliteM = convertTable(response)
         compoundM = rbind(compoundM, metaboliteM)
@@ -13,7 +13,7 @@ MS_changeNames = function(nodes, organism_code) {
     ## Check if there are drug nodes##
     if (length(grep("dr:", nodes) > 0)) {
         # Get drugs table
-        file = "http://rest.kegg.jp/list/drug"
+        file = "https://rest.kegg.jp/list/drug"
         response = getURL(file)
         drugM = suppressWarnings(convertTable(response))
         compoundM = rbind(compoundM, drugM)
@@ -21,7 +21,7 @@ MS_changeNames = function(nodes, organism_code) {
     ## Check if there are glycan compounds
     if (length(grep("gl:", nodes) > 0)) {
         # Get glycan table
-        file = "http://rest.kegg.jp/list/glycan"
+        file = "https://rest.kegg.jp/list/glycan"
         response = getURL(file)
         glycanM = convertTable(response)
         compoundM = rbind(compoundM, glycanM)

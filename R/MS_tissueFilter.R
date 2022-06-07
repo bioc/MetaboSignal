@@ -153,7 +153,7 @@ MS_tissueFilter = function(network_table, tissue, input_format = "kegg",
         to_print = ("Transforming gene IDs into orthology IDs")
         message(to_print)
 
-        file_ko = paste("http://rest.kegg.jp/link/ko/", "hsa", sep = "")
+        file_ko = paste("https://rest.kegg.jp/link/ko/", "hsa", sep = "")
         response_ko = getURL(file_ko)
         koTable = convertTable(response_ko)
         koTable[, 2] = substr(koTable[, 2], 4, 9)

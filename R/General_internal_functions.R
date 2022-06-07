@@ -286,7 +286,7 @@ path_as_network = function(path) {
 
 #################### From_geneID_to_symbol ################
 From_geneID_to_symbol = function(ID) {
-    file = file = paste("http://rest.kegg.jp/get/", ID, sep = "")
+    file = file = paste("https://rest.kegg.jp/get/", ID, sep = "")
     find = try(readLines(file), silent = TRUE)
     if (grepl("Error", find[1]) == FALSE) {
         find = find[2]
@@ -308,7 +308,7 @@ From_geneID_to_symbol = function(ID) {
 
 #################### MS_FindCompound ####################
 MS_FindCompound = function(match = NULL) {
-    file = "http://rest.kegg.jp/list/compound"
+    file = "https://rest.kegg.jp/list/compound"
     response = getURL(file)
     compoundM = convertTable(response)
     colnames(compoundM) = c("KEGG compound", "common names")
@@ -323,7 +323,7 @@ MS_FindCompound = function(match = NULL) {
 
 #################### MS_FindOrganism ####################
 MS_FindOrganism = function(match = NULL) {
-    file = "http://rest.kegg.jp/list/organism"
+    file = "https://rest.kegg.jp/list/organism"
     response = getURL(file)
     organismM = convertTable(response)
     colnames(organismM) = c("T", "organism_code", "organism_name",
@@ -339,7 +339,7 @@ MS_FindOrganism = function(match = NULL) {
 
 #################### MS_FindPathway ####################
 MS_FindPathway = function(match = NULL, organism_code = NULL) {
-    file = paste("http://rest.kegg.jp/list/pathway/", organism_code, sep = "")
+    file = paste("https://rest.kegg.jp/list/pathway/", organism_code, sep = "")
     response = try(getURL(file), silent = TRUE)
     if (nchar(response) == 0) {
         stop("A valid organism_code is required for KEGG_entry = pathway")

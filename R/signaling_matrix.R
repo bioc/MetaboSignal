@@ -1,6 +1,6 @@
 #################### get_interactiontype ####################
 get_interactiontype = function(path) {
-    file = paste("http://rest.kegg.jp/get/", path, "/kgml", sep = "")
+    file = paste("https://rest.kegg.jp/get/", path, "/kgml", sep = "")
     interactions = parseKGML2DataFrame(file, reactions = FALSE)
 
     if(nrow(interactions) == 0) {
@@ -86,7 +86,7 @@ signaling_matrix = function(global_network_all) {
 
 #################### get_interactiontype ####################
 get_interactiontype = function(path) {
-    file = paste("http://rest.kegg.jp/get/", path, "/kgml", sep = "")
+    file = paste("https://rest.kegg.jp/get/", path, "/kgml", sep = "")
     interactions = suppressWarnings(parseKGML2DataFrame(file, reactions = TRUE))
     if(nrow(interactions) == 0) {
         return(NULL)

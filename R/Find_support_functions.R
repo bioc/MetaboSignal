@@ -87,7 +87,7 @@ MS_convertGene = function(genes, organism_code, organism_name = NULL,
 
     ## Transform the KEGG IDs into orthology IDs
     if (orthology == TRUE) {
-        file_ko = paste("http://rest.kegg.jp/link/ko/", organism_code, sep = "")
+        file_ko = paste("https://rest.kegg.jp/link/ko/", organism_code, sep = "")
         response_ko = getURL(file_ko)
         if(nchar(response_ko) == 0) {
           stop ("Could not get orthology IDs. Check that organism_code is correct")
