@@ -7,7 +7,7 @@ get_metabonet = function(path, all_paths, organism_code) {
             parsed_path = NULL
         } else {
             # Check that the input path exists
-            file = paste("http://rest.kegg.jp/get/", path, "/kgml", sep = "")
+            file = paste("https://rest.kegg.jp/get/", path, "/kgml", sep = "")
             pathway = try(getURL(file), silent = TRUE)
             reactions = try(getReactions(parseKGML(pathway)), silent = TRUE)
 
@@ -31,7 +31,7 @@ get_metabonet = function(path, all_paths, organism_code) {
 get_signalnet = function(path, all_paths) {
     message(path)
     if (path %in% all_paths) {
-        file = paste("http://rest.kegg.jp/get/", path, "/kgml", sep = "")
+        file = paste("https://rest.kegg.jp/get/", path, "/kgml", sep = "")
         pathway = try(getURL(file), silent = TRUE)
         path_parsed = try(parseKGML(pathway), silent = TRUE)
         path_network = try(KEGGpathway2Graph(path_parsed, genesOnly = FALSE,
@@ -331,7 +331,7 @@ MS_keggNetwork = function(metabo_paths = NULL, signaling_paths = NULL,
         to_print = ("Transforming gene IDs into orthology IDs")
         message(to_print)
 
-        file_ko = paste("http://rest.kegg.jp/link/ko/", organism_code, sep = "")
+        file_ko = paste("https://rest.kegg.jp/link/ko/", organism_code, sep = "")
         response_ko = getURL(file_ko)
         koTable = convertTable(response_ko)
         koTable[, 2] = substr(koTable[, 2], 4, 9)

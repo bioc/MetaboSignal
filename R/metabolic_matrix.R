@@ -132,15 +132,15 @@ metabolic_matrix = function(path_names, list_parsed_paths, organism_code,
 
     ## Link reactions to genes (organism specific or orthology IDs)
 
-    file_enzyme = paste("http://rest.kegg.jp/link/enzyme/", organism_code, sep = "")
+    file_enzyme = paste("https://rest.kegg.jp/link/enzyme/", organism_code, sep = "")
     response_enzyme = getURL(file_enzyme)
     enzymeTable = convertTable(response_enzyme)
 
-    file_reaction = "http://rest.kegg.jp/link/reaction/enzyme"
+    file_reaction = "https://rest.kegg.jp/link/reaction/enzyme"
     response_reaction = getURL(file_reaction)
     reactionTable = convertTable(response_reaction)
 
-    file_ko = paste("http://rest.kegg.jp/link/ko/", organism_code, sep = "")
+    file_ko = paste("https://rest.kegg.jp/link/ko/", organism_code, sep = "")
     response_ko = getURL(file_ko)
     koTable = convertTable(response_ko)
     koTable[, 2] = substr(koTable[, 2], 4, 9)
@@ -190,10 +190,10 @@ get_metabonetR <- function(path) {
         parsed_path <- NULL
     } else {
         # Check that the input path exists
-        file <- paste("http://rest.kegg.jp/get/", path, "/kgml", sep = "")
+        file <- paste("https://rest.kegg.jp/get/", path, "/kgml", sep = "")
         pathway <- try(getURL(file), silent = TRUE)
         reactions <- try(getReactions(parseKGML(pathway)), silent = TRUE)
-        
+
         if (grepl("Error", reactions[1]) == TRUE) {
             to_print <- paste(path, "-path ID without XML:path removed", sep = "")
             message(to_print)

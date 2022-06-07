@@ -11,7 +11,7 @@ get_source = function(edge) {
     ans_o = grepl("o_", edge)
     ans_t = grepl("t_", edge)
     #ans_m = grepl("m_", edge)
-    
+
    # if (ans_m) { #microRNA
         #return("mirtarbase")
     #}
@@ -53,7 +53,7 @@ get_molecule_type = function(node, organism_code) {
     } else if (grepl("rn", node) == TRUE) {
         node_type = "reaction"
     } else if (grepl(organism_code, node) == TRUE | grepl("K", node) == TRUE) {
-        file = paste("http://rest.kegg.jp/get/", node, sep = "")
+        file = paste("https://rest.kegg.jp/get/", node, sep = "")
         lines = try(readLines(file), silent = TRUE)
         if (grepl("Error", lines[1]) == FALSE) {
             enzyme_lines = grep("EC:", lines[1:5])
@@ -73,7 +73,7 @@ get_molecule_type = function(node, organism_code) {
     } else {
         node_type = "other"
     }
-    
+
     return(node_type)
 }
 
@@ -96,7 +96,7 @@ MS_exportCytoscape = function(network_table, organism_code, names = TRUE,
     rev_ind = grep("compound:reversible", network[, 3])
 
     if (length(rev_ind) > 0) {
-        rev_edges = paste(network[rev_ind, 1], network[rev_ind, 2], 
+        rev_edges = paste(network[rev_ind, 1], network[rev_ind, 2],
                           network[rev_ind, 3], sep = ">")
         new_edges = do.call(rbind, lapply(rev_edges, cyto_directionality))
         network = rbind(network[-rev_ind, ], unique(new_edges))
