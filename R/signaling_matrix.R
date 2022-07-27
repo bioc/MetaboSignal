@@ -1,7 +1,9 @@
 #################### get_interactiontype ####################
 get_interactiontype = function(path) {
+
     file = paste("https://rest.kegg.jp/get/", path, "/kgml", sep = "")
-    interactions = parseKGML2DataFrame(file, reactions = FALSE)
+    pathway = try(getURL(file), silent = TRUE)
+    interactions = parseKGML2DataFrame(pathway, reactions = FALSE)
 
     if(nrow(interactions) == 0) {
         return(NULL)
@@ -15,7 +17,6 @@ collapse_interactions = function(interaction, all_interactions) {
     ind = which(all_interactions[, 1] == interaction[1] &
                 all_interactions[, 2] == interaction[2])
     subtypes = sort(unique(all_interactions[ind, "subtype"])) ## Updated on 5/09/19 - Thank you: Shilpa Harshan!
-    print(subtypes)
     subtype = paste(subtypes, collapse = "/")
     subtype = gsub(" ", "-", subtype)
     new_line = c(interaction[1], interaction[2], subtype)
@@ -82,28 +83,6 @@ signaling_matrix = function(global_network_all) {
         }
     }
     return(signaling_table)
-}
-
-#################### get_interactiontype ####################
-get_interactiontype = function(path) {
-    file = paste("https://rest.kegg.jp/get/", path, "/kgml", sep = "")
-    interactions = suppressWarnings(parseKGML2DataFrame(file, reactions = TRUE))
-    if(nrow(interactions) == 0) {
-        return(NULL)
-    } else {
-        return(interactions)
-    }
-}
-
-#################### collapse_interactions ####################
-collapse_interactions = function(interaction, all_interactions) {
-    ind = which(all_interactions[, 1] == interaction[1] &
-                all_interactions[, 2] == interaction[2])
-    subtypes = sort(unique(all_interactions[ind, "subtype"]))
-    subtype = paste(subtypes, collapse = ";")
-    subtype = gsub(" ", "-", subtype)
-    new_line = c(interaction[1], interaction[2], subtype)
-    return(new_line)
 }
 
 #################### MS_interactionType ####################
