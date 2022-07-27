@@ -2,12 +2,12 @@ Package: MetaboSignal
 Type: Package
 Title: MetaboSignal: a network-based approach to overlay and explore
         metabolic and signaling KEGG pathways
-Version: 1.27.1
+Version: 1.27.2
 Date: 2022-06-07
 Author: Andrea Rodriguez-Martinez, Rafael Ayala, Joram M. Posma, Ana L. Neves, Maryam Anwar, Jeremy K. Nicholson, Marc-Emmanuel Dumas
 Maintainer: Andrea Rodriguez-Martinez
         <andrea.rodriguez-martinez13@imperial.ac.uk>, Rafael Ayala
-        <rafael.ayala@oist.jp>
+        <rafaelayalahernandez@gmail.com>
 Description: MetaboSignal is an R package that allows merging,
         analyzing and customizing metabolic and signaling KEGG
         pathways. It is a network-based approach designed to explore
