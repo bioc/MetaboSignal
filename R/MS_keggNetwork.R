@@ -175,7 +175,7 @@ MS_keggNetwork = function(metabo_paths = NULL, signaling_paths = NULL,
     if (grepl("Error", lines)[1]) { # example: metabo_paths = 'X'
         stop("Incorrect path IDs")
     }
-    all_paths = substr(names(lines), 6, nchar(lines))
+    all_paths = names(lines)
 
     ## Check if input paths are included
     if(!is.null(metabo_paths)) {
