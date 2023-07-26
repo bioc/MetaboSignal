@@ -32,7 +32,7 @@ MS_reactionNetwork <- function(metabo_paths) {
         }
     }
     ## Add directionality
-    if(metabo_paths == "rn01100") {
+    if(all(metabo_paths == "rn01100")) {
       metabolic_table_final <- cbind(metabolic_table, type = "k_compound:reversible")
     } else {
       rownames(metabolic_table) <- paste(metabolic_table[, 1], metabolic_table[, 2], sep = "_")
