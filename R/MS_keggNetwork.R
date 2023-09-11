@@ -139,7 +139,7 @@ find_autoedges = function(edge) {
 
 #################### MS_keggNetwork ###################
 MS_keggNetwork = function(metabo_paths = NULL, signaling_paths = NULL,
-                           expand_genes = FALSE, convert_entrez = FALSE) {
+                          expand_genes = FALSE, convert_entrez = FALSE) {
 
     ########## 0)Preparatory steps###########
 
