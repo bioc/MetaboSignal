@@ -194,11 +194,10 @@ MS_topologyFilter = function(network_table, mode = "all", type, target_node = NU
     if (type != "distance") {
         if (mode == "all") {
             bw = as.numeric(betweenness(network_i, all_nodes, directed = FALSE,
-                                        weights = NULL, nobigint = TRUE,
-                                        normalized = TRUE))
+                                        weights = NULL, normalized = TRUE))
         } else {
             bw = betweenness(network_i, all_nodes, directed = TRUE,
-                             weights = NULL, nobigint = TRUE, normalized = TRUE)
+                             weights = NULL, normalized = TRUE)
         }
     }
 
@@ -275,10 +274,10 @@ MS_nodeBW = function(network_table, mode = "all", normalized = TRUE) {
     nodes = unique(as.vector(network_table))
     if (mode == "all") {
         BW = betweenness(network_i, nodes, directed = FALSE,
-            weights = NULL, nobigint = TRUE, normalized = normalized)
+            weights = NULL, normalized = normalized)
     } else {
         BW = betweenness(network_i, nodes, directed = TRUE, weights = NULL,
-             nobigint = TRUE, normalized = normalized)
+             normalized = normalized)
     }
     bw = as.numeric(BW)
     hist(bw, col = "gray", main = paste("Node betweeness distribution"))
