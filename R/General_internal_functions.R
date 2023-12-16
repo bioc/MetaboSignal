@@ -167,10 +167,10 @@ BW_ranked_SP = function (all_paths, BW_matrix, networkBW_i, mode) {
         if (gene %in% BW_matrix[, 1] == FALSE) {
             if (mode == "all") {
                 bw = betweenness(networkBW_i, gene, directed = FALSE,
-                                 weights = NULL, nobigint = TRUE, normalized = TRUE)
+                                 weights = NULL, normalized = TRUE)
             } else {
                 bw = betweenness(networkBW_i, gene, directed = TRUE,
-                                 weights = NULL, nobigint = TRUE, normalized = TRUE)
+                                 weights = NULL, normalized = TRUE)
             }
             bw_line = c(gene, as.numeric(bw))
             BW_matrix = rbind(BW_matrix, bw_line)
