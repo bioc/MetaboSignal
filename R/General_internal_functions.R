@@ -323,15 +323,14 @@ MS_FindCompound = function(match = NULL) {
 
 #################### MS_FindOrganism ####################
 MS_FindOrganism = function(match = NULL) {
-    file = "https://rest.kegg.jp/list/organism"
+    file = "https://rest.kegg.jp/list/genome"
     response = getURL(file)
     organismM = convertTable(response)
-    colnames(organismM) = c("T", "organism_code", "organism_name",
-        "description")
+    colnames(organismM) = c("T", "organism")
     rownames(organismM) = NULL
     if (length(match) >= 1) {
         target_matrix = organismM
-        target_column = organismM[, 3]
+        target_column = organismM[, 2]
         matchM = match_KEGG(match, target_column, target_matrix)
         return(matchM)
     } else (return(organismM))
